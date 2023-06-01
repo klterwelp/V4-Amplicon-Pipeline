@@ -9,7 +9,7 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=klt75@duke.edu
 
-#------------------ SCRIPT INFO: Diversity-ANCOM-Analysis.slurm --------------------#
+#------------------ SCRIPT INFO: Diversity-ANCOM-AnalysisV2.slurm --------------------#
 # PURPOSE
 # - This script does wayyyy too much
 # INPUT
