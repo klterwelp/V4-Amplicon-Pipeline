@@ -9,17 +9,22 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=klt75@duke.edu
 
-# file: Diversity-ANCOM-Analysis.slurm
-# input files needed in main folder:
-	# feature table from composition-add-pseudocount 
-	# metadata table
+#------------------ SCRIPT INFO: ANCOMBC.slurm --------------------#
 
-# input in Config file: 
-	# set $metadataColumnName variable to metadata column of interest
-	# set $MAPname variable to the mapping file with the samples we will analyze 
+# PURPOSE
+# - Run composition analysis with ANCOMBC 
+# INPUT
+# - genus-table-silva.qza
+# - Set script/config.sh VARIABLES
+# 	- $MAPname
+#	- $metadataColumnName # ONLY IN NAMES, replace with forumla
+# 	- SHOULD ADD: $ANCOMBCformula and use that for names
+# OUTPUT
+# - L6-ANCOMBC-$metadataColumnName.qza (intermediate)
+# - L6-ANCOMBC-TABLE-$metadataColumnName.qzv
+# - L6-ANCOMBC-BARPLOT-$metadataColumnName.qzv 
 
-# log directory
-# script in main folder
+# ----------------- SCRIPT START -------------------- # 
 
 # Source variable names from config.sh
 echo -e "Source variable names from config.sh"
@@ -36,6 +41,7 @@ qiime composition ancombc \
 --i-table genus-table-silva.qza \
 --m-metadata-file $MAPname \
 --p-formula "Supplement + Diet + Time" \
+# change to $ANCOMBCformula 
 --o-differentials L6-ANCOMBC-$metadataColumnName.qza
 
 #ANCOM-BC VISUALIZATION

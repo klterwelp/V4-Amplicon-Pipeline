@@ -9,18 +9,53 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=klt75@duke.edu
 
-# file: Diversity-ANCOM-Analysis.slurm
-# input files needed in main folder:
-	# table.qza
-	# $MAPname (DescriptiveNamemap.txt) 
-		# remove rows we are not interested in analyzing for this run
-	# rooted-tree.qza
-	# taxonomy-silva.qza
+#------------------ SCRIPT INFO: Diversity-ANCOM-Analysis.slurm --------------------#
+# PURPOSE
+# - This script does wayyyy too much
+# INPUT
+# - table.qza
+# - rooted-tree.qza
+# - taxonomy-silva.qza
+# - Set script/config.sh VARIABLES
+# 	- $metadataColumnName : metadata column of interest
+# 	- $SAMPLINGdepth : rarefaction sampling depth
+# 	- $MAPname : metadata file
+# OUTPUT
+# - filtered-table.qza
+# - genus-table-silva.qza
+# - comp-genus-table-silva.qza
+# - taxa-barplots-silva.qzv
+# - core-metrics-results/ (intermediate/visualizations)
+# 		-faith_pd_vector.qza
+#		-observed_features_vector.qza 
+#		-shannon_vector.qza
+# 		-evenness_vector.qza
+# 		-unweighted_unifrac_distance_matrix.qza
+#		-weighted_unifrac_distance_matrix.qza
+#		-jaccard_distance_matrix.qza
+#		-bray_curtis_distance_matrix.qza
+#		-unweighted_unifrac_pcoa_results.qza
+#		-weighted_unifrac_pcoa_results.qzv
+#		-jaccard_pcoa_results.qzv
+#		-bray_curtis_pcoa_results.qzv
+#		-unweighted_unifrac_emperor.qzv
+#		-weighted_unifrac_emperor.qzv
+#		-jaccard_emperor.qzv
+#		-bray_curtis_emperor.qzv
+# - alpha-group-signifance/	(visualizations)								(only require $MAPname)
+# 		-faith-pd-group-significance.qzv	
+#		-evenness-group-significance.qzv
+#		-shannon-group-significance.qzv
+#		-observed-features-group-significance.qzv
+# - beta-group-significance/ (visualizations)								(require $metadataColumnName)
+#		-weighted-unifrac-$metadataColumnName-permanova.qzv 
+#		-unweighted-unifrac-$metadataColumnName-permanova.qzv
+#		-bray-curtis-$metadataColumnName-permanova.qzv
+#		-jaccard-$metadataColumnName-permanova.qzv
+# - ANCOM/
+#		- L6-ANCOM-$metadataColumnName.qzv
 
-# input in Config file: 
-	# set $metadataColumnName variable to metadata column of interest
-	# set $SAMPLINGdepth variable to sampling depth 
-	# set $MAPname variable to the mapping file with the samples we will analyze 
+# ----------------- SCRIPT START -------------------- # 
 
 # log directory
 # script in main folder
