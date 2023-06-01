@@ -9,7 +9,7 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS
 
-#------------------ SCRIPT INFO: 04_classify_taxaFilter.sbatch --------------------#
+#------------------ SCRIPT INFO: 04_classify_taxaFilter.slurm --------------------#
 
 # PURPOSE
 # - classify sequences and filter based on taxonomy (remove eukaryotic/unassigned sequences)

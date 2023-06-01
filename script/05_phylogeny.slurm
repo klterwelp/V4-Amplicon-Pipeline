@@ -9,7 +9,7 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS
 
-#------------------ SCRIPT INFO: 05_phylogeny.sbatch --------------------#
+#------------------ SCRIPT INFO: 05_phylogeny.slurm --------------------#
 
 # PURPOSE
 # - generate a phylogenetic tree from sequences  

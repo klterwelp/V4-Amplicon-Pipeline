@@ -10,7 +10,7 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS
 
-#------------------ SCRIPT INFO: 01_import.sbatch --------------------#
+#------------------ SCRIPT INFO: 01_import.slurm --------------------#
 
 # PURPOSE
 # - import demultiplexed pair end fastq.gz sequences into QIIME2

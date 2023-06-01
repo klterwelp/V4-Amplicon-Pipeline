@@ -9,7 +9,7 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS
 
-#------------------ SCRIPT INFO: 03_dada2.sbatch --------------------#
+#------------------ SCRIPT INFO: 03_dada2.slurm --------------------#
 
 # PURPOSE
 # - quality trim, filter, denoise sequences, chimera removal, and merging of paired end reads. 
