@@ -21,14 +21,14 @@ editor: visual
 
 -   Add checksum script
 
-### Folder Structure 
+### Folder Structure
 
 **Based on various computational project resources:**
 
 ```{=plain}
-data/ # read-only raw data
+rawData/ # read-only raw data
 meta/ # read-only
-clean_data/ # cleaned data and metadata tables 
+cleanData/ # cleaned data and metadata tables 
   data/ 
   meta/ 
 
