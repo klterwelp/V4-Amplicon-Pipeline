@@ -9,13 +9,29 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=klt75@duke.edu
 
+#------------------ SCRIPT INFO: 10A_rarefaction.slurm --------------------#
+
+# PURPOSE
+# - Generate alpha rarefaction curve from 1:$QiimeMax reads 
+# - Determine rarefaction depth for alpha diversity based on alpha-rarefaction.qzv 
+# INPUT
+# - filtered-table.qza
+# - rooted-tree.qza
+# - Set script/config.sh VARIABLES
+#   - $QiimeMax
+#   - $StepNumber
+#   - $MAPname
+# OUTPUT
+# - alpha-rarefaction.qzv
+
+# ----------------- SCRIPT START -------------------- # 
+
 # Source variable names from config.sh
 echo -e "Source variable names from config.sh"
 dos2unix ./config.sh
 source ./config.sh
 
 
-# file: 10A_rarefaction.slurm
 # alpha, beta diversity and PCoa analysis
 # need to add the variable "QiimeMax" based on the highest number of reads in all samples
 # need to add variable StepNumber based on number of steps between highest and 1
