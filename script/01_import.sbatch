@@ -10,16 +10,20 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS
 
-# file: 01_import.sbatch
-# purpose: import demultiplexed pair end fastq.gz sequences.
-# input: 
-    # demultiplexed pair end fastq.gz sequences in data folder 
-# output: 
-    # manifest.csv (intermediate)
-    # 01_import.fastq.qza (used in 03_dada2)
-    # 01_import.qzv (visualize seq quality)
+#------------------ SCRIPT INFO: 01_import.sbatch --------------------#
 
-# load parameters
+# PURPOSE
+# - import demultiplexed pair end fastq.gz sequences into QIIME2
+# INPUT
+# - demultiplexed paired-end fastq.gz sequences in data folder 
+# OUTPUT
+# - manifest.csv (intermediate)
+# - 01_import.fastq.qza (used in 03_dada2)
+# - 01_import.qzv (visualize seq quality)
+
+# ----------------- SCRIPT START -------------------- # 
+
+# load parameters from config.sh
 dos2unix ./config.sh
 source ./config.sh
 

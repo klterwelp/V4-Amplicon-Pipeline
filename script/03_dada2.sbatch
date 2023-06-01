@@ -9,15 +9,20 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS
 
-# file: 03_pair_dada2.sbatch
-# purpose: quality trim, filter, denoise sequences, chimera removal, and merging of paired end reads. 
-# input: 01_import.fastq.qza 
-# output: 
-    # 03_dada2_stats.tsv.qza (intermediate)
-    # 03_table.biom.qza (04_classify-filter)
-    # 03_seq.fasta.qza  (04_classify-filter)
-    # 03_seq.fasta.qzv (table of sequences)
-    # 03_dada2_stats.tsv.qzv (check # of reads passing filters)
+#------------------ SCRIPT INFO: 03_dada2.sbatch --------------------#
+
+# PURPOSE
+# - quality trim, filter, denoise sequences, chimera removal, and merging of paired end reads. 
+# INPUT
+# - 01_import.fastq.qza 
+# OUTPUT
+# - 03_dada2_stats.tsv.qza (intermediate)
+# - 03_table.biom.qza (04_classify-filter)
+# - 03_seq.fasta.qza  (04_classify-filter)
+# - 03_seq.fasta.qzv (table of sequences)
+# - 03_dada2_stats.tsv.qzv (check # of reads passing filters)
+
+# ----------------- SCRIPT START -------------------- # 
 
 dos2unix ./config.sh
 source ./config.sh

@@ -9,22 +9,25 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS
 
-# file: 04_classify_taxaFilter.sbatch
-# purpose: classify sequences and filter based on taxonomy (remove eukaryotic/unassigned sequences)
-# input: 
-  # 03_seq.fasta.qza
-  # 03_table.biom.qza
-  # map.txt
-  # assign parameter: 
-    # $REF_FILE
-# output: 
-  # {REF_DATABASE}.tsv.qza / taxonomy-{REF_DATABASE}.qza 
-  # table.qza / {REF_DATABASE}-cleaned.biom.qza
-  # {REF_DATABASE}-excluded.biom.qza
-  # rep-seqs.qza / {REF_DATABASE}-cleaned.fasta.qza
-  # {REF_DATABASE}-excluded.fasta.qza
+#------------------ SCRIPT INFO: 04_classify_taxaFilter.sbatch --------------------#
 
-# output: 
+# PURPOSE
+# - classify sequences and filter based on taxonomy (remove eukaryotic/unassigned sequences)
+# INPUT 
+# - 03_seq.fasta.qza
+# - 03_table.biom.qza
+# - map.txt
+# - Set script/config.sh VARIABLES
+#   - $REF_FILE
+# OUTPUT 
+# - {REF_DATABASE}.tsv.qza / taxonomy-{REF_DATABASE}.qza 
+# - table.qza / {REF_DATABASE}-cleaned.biom.qza
+# - {REF_DATABASE}-excluded.biom.qza
+# - rep-seqs.qza / {REF_DATABASE}-cleaned.fasta.qza
+# - {REF_DATABASE}-excluded.fasta.qza
+
+# ----------------- SCRIPT START -------------------- # 
+
 # load parameters
 dos2unix ./config.sh
 source ./config.sh

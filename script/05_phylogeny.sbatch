@@ -9,15 +9,19 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS
 
-# file: 05_phylogeny.sbatch
-# purpose: generate a phylogenetic tree from sequences  
-# inputs: 
-	# rep-seqs.qza (filtered sequences from 04_taxfilter) 
-# outputs: 
-	# aligned-rep-seqs.qza (aligned sequences)
-	# masked-alignment-rep-seqs.qza (masked aligned sequences)
-	# unrooted-tree.qza
-	# rooted-tree.qza (used downstream) 
+#------------------ SCRIPT INFO: 05_phylogeny.sbatch --------------------#
+
+# PURPOSE
+# - generate a phylogenetic tree from sequences  
+# INPUT 
+# - rep-seqs.qza (filtered sequences from 04_taxfilter) 
+# OUTPUT 
+# - aligned-rep-seqs.qza (aligned sequences)
+# - masked-alignment-rep-seqs.qza (masked aligned sequences)
+# - unrooted-tree.qza
+# - rooted-tree.qza (used downstream) 
+
+# ----------------- SCRIPT START -------------------- # 
 
 # load parameters
 dos2unix ./config.sh
