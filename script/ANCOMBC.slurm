@@ -14,15 +14,15 @@
 # PURPOSE
 # - Run composition analysis with ANCOMBC 
 # INPUT
-# - genus-table-silva.qza
+# - genus-table-silva.qza (change to table.qza from 04_classify-filter; add step to qiime taxa collapse)
 # - Set script/config.sh VARIABLES
-# 	- $MAPname
+# 	- $MAPname : name of metadata file
 #	- $metadataColumnName # ONLY IN NAMES, replace with forumla
-# 	- SHOULD ADD: $ANCOMBCformula and use that for names
+# 	    - SHOULD ADD: $ANCOMBCformula and use that for names
 # OUTPUT
 # - L6-ANCOMBC-$metadataColumnName.qza (intermediate)
-# - L6-ANCOMBC-TABLE-$metadataColumnName.qzv
-# - L6-ANCOMBC-BARPLOT-$metadataColumnName.qzv 
+# - L6-ANCOMBC-TABLE-$metadataColumnName.qzv (visualizations)
+# - L6-ANCOMBC-BARPLOT-$metadataColumnName.qzv (visualizations)
 
 # ----------------- SCRIPT START -------------------- # 
 

@@ -14,17 +14,17 @@
 # PURPOSE
 # - classify sequences and filter based on taxonomy (remove eukaryotic/unassigned sequences)
 # INPUT 
-# - 03_seq.fasta.qza
-# - 03_table.biom.qza
-# - map.txt
+# - 03_seq.fasta.qza (from: 03_dada2)
+# - 03_table.biom.qza (from: 03_dada2)
+# - map.txt (in meta/) -> required for excluded qzvs
 # - Set script/config.sh VARIABLES
-#   - $REF_FILE
+#   - $REF_FILE -> path to trained classifier (MAYBE CHANGE NAME?? ie; SILVAclassifier)
 # OUTPUT 
-# - {REF_DATABASE}.tsv.qza / taxonomy-{REF_DATABASE}.qza 
-# - table.qza / {REF_DATABASE}-cleaned.biom.qza
-# - {REF_DATABASE}-excluded.biom.qza
-# - rep-seqs.qza / {REF_DATABASE}-cleaned.fasta.qza
-# - {REF_DATABASE}-excluded.fasta.qza
+# - {REF_DATABASE}.tsv.qza / taxonomy-{REF_DATABASE}.qza (intermediate) : taxonomy table, pre-filtered
+# - table.qza / {REF_DATABASE}-cleaned.biom.qza (ANCOMBC, Diversity.slurm)
+# - {REF_DATABASE}-excluded.biom.qza (viz, excluded taxa table)
+# - rep-seqs.qza / {REF_DATABASE}-cleaned.fasta.qza (05_phylogeny, Diversity.slurm)
+# - {REF_DATABASE}-excluded.fasta.qza (viz, excluded sequences)
 
 # ----------------- SCRIPT START -------------------- # 
 

@@ -16,10 +16,10 @@
 # INPUT 
 # - rep-seqs.qza (filtered sequences from 04_taxfilter) 
 # OUTPUT 
-# - aligned-rep-seqs.qza (aligned sequences)
-# - masked-alignment-rep-seqs.qza (masked aligned sequences)
-# - unrooted-tree.qza
-# - rooted-tree.qza (used downstream) 
+# - aligned-rep-seqs.qza (intermediate) : aligned sequences
+# - masked-alignment-rep-seqs.qza (interemdiate) : masked aligned sequences
+# - unrooted-tree.qza (intermediate) : used to construct rooted tree
+# - rooted-tree.qza (Diversity.slurm) : phylogenetic diversity measurements 
 
 # ----------------- SCRIPT START -------------------- # 
 

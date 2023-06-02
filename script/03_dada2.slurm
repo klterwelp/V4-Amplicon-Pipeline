@@ -14,12 +14,12 @@
 # PURPOSE
 # - quality trim, filter, denoise sequences, chimera removal, and merging of paired end reads. 
 # INPUT
-# - 01_import.fastq.qza 
+# - 01_import.fastq.qza (from: 01_import)
 # OUTPUT
 # - 03_dada2_stats.tsv.qza (intermediate)
 # - 03_table.biom.qza (04_classify-filter)
 # - 03_seq.fasta.qza  (04_classify-filter)
-# - 03_seq.fasta.qzv (table of sequences)
+# - 03_seq.fasta.qzv (table of ASVs, visualization)
 # - 03_dada2_stats.tsv.qzv (check # of reads passing filters)
 
 # ----------------- SCRIPT START -------------------- # 

@@ -15,14 +15,14 @@
 # - Generate alpha rarefaction curve from 1:$QiimeMax reads 
 # - Determine rarefaction depth for alpha diversity based on alpha-rarefaction.qzv 
 # INPUT
-# - filtered-table.qza
-# - rooted-tree.qza
+# - filtered-table.qza !!! should change to table.qza (04_classify-filter), filter with meta file in script
+# - rooted-tree.qza (05_phylogeny)
 # - Set script/config.sh VARIABLES
-#   - $QiimeMax
-#   - $StepNumber
+#   - $QiimeMax # max rarefaction depth, usually set to max number of reads from all samples !!! change to -> $MaxDepth
+#   - $StepNumber # number of rarefaction depths to include between min (1) and $MaxDepth 
 #   - $MAPname
 # OUTPUT
-# - alpha-rarefaction.qzv
+# - alpha-rarefaction.qzv (visualization, check optimal rarefaction depth)
 
 # ----------------- SCRIPT START -------------------- # 
 

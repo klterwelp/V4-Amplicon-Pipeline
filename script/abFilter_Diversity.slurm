@@ -8,6 +8,7 @@
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=klt75@duke.edu
+
 #------------------ SCRIPT INFO: abFilter_Diversity.slurm --------------------#
 
 # PURPOSE
@@ -15,18 +16,18 @@
 # - Generate core diversity metrics based on filtered table
 # - Test statistical signficant differences for alpha and beta diversity metrics 
 # INPUT
-# - table.qza
-# - rooted-tree.qza
+# - table.qza (04_classify-filter)
+# - rooted-tree.qza (05_phylogeny)
 # - Set script/config.sh VARIABLES
 # 	- $metadataColumnName : metadata column to test
-# 	- $SAMPLINGdepth : sampling depth for rarefaction
+# 	- $SAMPLINGdepth : sampling depth for rarefaction, found from 10A_rarefaction
 # 	- $MAPname : name of metadata file 
 # OUTPUT
 # - filtered-table.qza (intermediate) 
 # 		- ASV table filtered by samples in metadata
 # - ab_filtered-table.qza (intermediate) 
 # 		- abundance/prevalence filtered ASV table 
-# - core-metrics-results/ (intermediate/visualizations)
+# - core-metrics-results/ (intermediate-qza/visualizations-qzv)
 # 		-faith_pd_vector.qza
 #		-observed_features_vector.qza 
 #		-shannon_vector.qza

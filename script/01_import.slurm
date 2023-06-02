@@ -19,7 +19,7 @@
 # OUTPUT
 # - manifest.csv (intermediate)
 # - 01_import.fastq.qza (used in 03_dada2)
-# - 01_import.qzv (visualize seq quality)
+# - 01_import.qzv (check seq quality)
 
 # ----------------- SCRIPT START -------------------- # 
 
