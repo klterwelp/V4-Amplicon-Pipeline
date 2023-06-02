@@ -37,14 +37,14 @@ mkdir -p ${WKPATH}/03_dada2/qza
 mkdir -p ${WKPATH}/03_dada2/qzv
 
 qiime dada2 denoise-paired \
- --i-demultiplexed-seqs $WKPATH/01_import/qza/${PREFIX}01_import.fastq.qza \
+ --i-demultiplexed-seqs $WKPATH/01_import/qza/01_import.fastq.qza \
  --p-trunc-len-f $QiimeDada2FL \
  --p-trunc-len-r $QiimeDada2RL \
  --p-trim-left-f $QiimeDada2FLeft \
  --p-trim-left-r $QiimeDada2RLeft \
- --o-denoising-stats $WKPATH/03_dada2/qza/${PREFIX}03_dada2_stats.tsv.qza \
- --o-table $WKPATH/03_dada2/qza/${PREFIX}03_table.biom.qza \
- --o-representative-sequences $WKPATH/03_dada2/qza/${PREFIX}03_seq.fasta.qza \
+ --o-denoising-stats $WKPATH/03_dada2/qza/03_dada2_stats.tsv.qza \
+ --o-table $WKPATH/03_dada2/qza/03_table.biom.qza \
+ --o-representative-sequences $WKPATH/03_dada2/qza/03_seq.fasta.qza \
  --p-n-threads 4 \
  --verbose
 echo -e "finished dada2 denoise."
@@ -52,14 +52,14 @@ echo -e $(date)
 
 echo -e "step 4a: export 03_dada2_seq.qzv"
 qiime feature-table tabulate-seqs \
- --i-data $WKPATH/03_dada2/qza/${PREFIX}03_seq.fasta.qza \
- --o-visualization $WKPATH/03_dada2/qzv/${PREFIX}03_seq.fasta.qzv
+ --i-data $WKPATH/03_dada2/qza/03_seq.fasta.qza \
+ --o-visualization $WKPATH/03_dada2/qzv/03_seq.fasta.qzv
 
 echo -e "step 4b: export 03_dada2_stats.tsv.qzv"
 qiime metadata tabulate \
- --m-input-file $WKPATH/03_dada2/qza/${PREFIX}03_dada2_stats.tsv.qza \
+ --m-input-file $WKPATH/03_dada2/qza/03_dada2_stats.tsv.qza \
  --p-page-size 400 \
- --o-visualization $WKPATH/03_dada2/qzv/${PREFIX}03_dada2_stats.tsv.qzv
+ --o-visualization $WKPATH/03_dada2/qzv/03_dada2_stats.tsv.qzv
 
 echo -e "finished dada2 qzv."
 echo -e $(date)

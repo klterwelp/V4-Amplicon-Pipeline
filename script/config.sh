@@ -8,7 +8,7 @@ part_name="scavenger"
 email_address="klt75@duke.edu"
 
 PREFIX="Mentz-20221025"
-WKPATH="/hpc/group/kimlab/Qiime2/Mentz-20221025"
+WKPATH="/hpc/group/kimlab/Qiime2/${PREFIX}"
 TMPDIR="/work/klt75"
 
 # DADA2 parameters

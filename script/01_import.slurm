@@ -49,7 +49,7 @@ mkdir -p ${WKPATH}/01_import/qzv
 qiime tools import \
  --type 'SampleData[PairedEndSequencesWithQuality]' \
  --input-path $WKPATH/data/manifest.csv \
- --output-path $WKPATH/01_import/qza/${PREFIX}01_import.fastq.qza \
+ --output-path $WKPATH/01_import/qza/01_import.fastq.qza \
  --input-format PairedEndFastqManifestPhred33
 
 echo -e "finished importing."
@@ -59,8 +59,8 @@ echo -e $(date)
 echo -e "step 2b: starting demux summarizing..."
 
 qiime demux summarize \
- --i-data $WKPATH/01_import/qza/${PREFIX}01_import.fastq.qza \
- --o-visualization $WKPATH/01_import/qzv/${PREFIX}01_import.qzv
+ --i-data $WKPATH/01_import/qza/01_import.fastq.qza \
+ --o-visualization $WKPATH/01_import/qzv/01_import.qzv
 
 echo -e "finished demux summarizing."
 echo -e $(date)
