@@ -27,7 +27,8 @@ editor: visual
 
 ```{=plain}
 rawData/ # read-only raw data
-meta/ # read-only
+  data/
+  meta/ 
 cleanData/ # cleaned data and metadata tables 
   data/ 
   meta/ 
