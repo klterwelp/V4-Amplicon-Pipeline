@@ -42,3 +42,8 @@ MAPname="map-noZymo.txt"
 # requires .txt / .tsv file extension in the variable
 metadataColumnName="Supplement-Diet-Time"
 SAMPLINGdepth=10000
+
+# ----------------------- ANCOMBC Variables ---------------------------- # 
+# taxonomic level to collapse down to for ANCOMBC analysis: 
+    # genus = 6
+taxaLvl=6

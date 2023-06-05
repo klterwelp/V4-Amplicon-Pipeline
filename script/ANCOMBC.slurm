@@ -37,6 +37,13 @@ echo -e $(date)
 #Add analyses for each comparison performed in mapping files
 echo -e "ANCOM-BC"
 
+# Collapse taxa based on level of taxonomy (6 for genus)
+qiime taxa collapse \
+--i-table filtered-table.qza \
+--i-taxonomy taxonomy-silva.qza \
+--p-level $taxaLvl \
+--o-collapsed-table genus-table-silva.qza
+
 qiime composition ancombc \
 --i-table genus-table-silva.qza \
 --m-metadata-file $MAPname \
