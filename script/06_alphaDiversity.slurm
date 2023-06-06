@@ -10,10 +10,9 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS
 
-#------------------ SCRIPT INFO: abFilter_Diversity.slurm --------------------#
+#------------------ SCRIPT INFO: alphaDiversity.slurm --------------------#
 
 # PURPOSE
-# - Filter feature table by prevalence and abundance
 # - Generate alpha rarefaction curve
 # - Measure alpha diversity  
 # - Test statistical signficant differences for alpha diversity 
