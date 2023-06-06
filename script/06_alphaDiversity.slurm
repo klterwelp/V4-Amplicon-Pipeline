@@ -15,7 +15,7 @@
 # PURPOSE
 # - Filter feature table by prevalence and abundance
 # - Generate alpha rarefaction curve
-# - Generate alpha diversity metrics 
+# - Measure alpha diversity  
 # - Test statistical signficant differences for alpha diversity 
 # INPUT
 # - table.qza (04_classify-filter)
@@ -29,8 +29,6 @@
 # - filtered-table.qza (intermediate) 
 # 		- ASV table filtered by samples in metadata
 # - alpha-rarefaction.qzv (visualization, check optimal rarefaction depth)
-# - ab_filtered-table.qza (intermediate) 
-# 		- abundance/prevalence filtered ASV table 
 # - core-metrics-results/ (intermediate-qza/visualizations-qzv)
 # 		-faith_pd_vector.qza
 #		-observed_features_vector.qza 
@@ -53,36 +51,36 @@ dos2unix ./config.sh
 source ./config.sh
 
 # record time and method name, env vars
-echo -e $(date)
+echo -e "$(date)"
 
 #Pre-prep for all analyses
-echo -e “Beginning file prep for downstream analyses”
+echo -e "Beginning file prep for downstream analyses"
 
 qiime feature-table filter-samples \
 --i-table table.qza \
---m-metadata-file $MAPname \
+--m-metadata-file "$MAPname" \
 --o-filtered-table filtered-table.qza
  
-echo -e “finished file prep”
-echo -e $(date)
+echo -e "finished file prep"
+echo -e "$(date)"
 
 #Diversity
 #Rerun Diversity for appropriate depth if 10,000 is insufficient or incorrect
 echo -e "Diversity"
 
-echo -e $(date)
+echo -e "$(date)"
 # rarefaction, check sample depth & seq read depth sufficient or not.
 echo -e "alpha diversity, rarefaction..." 
 qiime diversity alpha-rarefaction \
   --i-table filtered-table.qza \
   --i-phylogeny rooted-tree.qza \
-  --p-max-depth $QiimeMax \
-  --p-steps $StepNumber \
-  --m-metadata-file $MAPname \
+  --p-max-depth "$QiimeMax" \
+  --p-steps "$StepNumber" \
+  --m-metadata-file "$MAPname" \
   --o-visualization alpha-rarefaction.qzv
 
   echo -e "finished rarefaction..."
-echo -e $(date)
+echo -e "$(date)"
 
 # Alpha diversity metrics 
 echo -e "Calculating alpha diversity metrics" 
@@ -91,8 +89,35 @@ do
 echo $metric
 qiime diversity alpha \
   --i-table filtered-table.qza \
-  --p-metric $metric \
-  --o-alpha-diversity "{$metric}_vector.qza"  
+  --p-metric ${metric} \
+  --o-alpha-diversity "${metric}_vector.qza"  
 done 
+# for-loop to measure shannon, ASVs, evenness
+
 echo -e "Done calculating non-phylogenetic methods..."
-echo -e $(date)
+echo -e "$(date)"
+
+echo -e "Calculating phylogenetic alpha diversity" 
+qiime diversity alpha-phylogenetic \
+  --i-table filtered-table.qza \
+  --i-phylogeny rooted-tree.qza \
+  --p-metric 'faith_pd' \
+  --o-alpha-diversity faith_pd_vector.qza 
+
+echo -e "$(date)"
+
+echo -e "Done calculating phylogenetic diversity" 
+
+echo -e "Now running alpha diversity statistical significance tests"
+
+for metric in 'shannon' 'observed_features' 'pielou_e' 'faith_pd'
+do 
+echo $metric
+qiime diversity alpha-group-significance \
+  --i-alpha-diversity "${metric}_vector.qza" \
+  --m-metadata-file "$MAPname" \
+  --o-visualization "${metric}-group-significance.qzv"
+done
+# for-loop to test statistically significant differences between groups of alpha diversity values 
+echo -e "$(date)"
+echo -e "Done calculating alpha diversity stats" 
