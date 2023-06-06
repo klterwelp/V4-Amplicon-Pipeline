@@ -83,3 +83,16 @@ qiime diversity alpha-rarefaction \
 
   echo -e "finished rarefaction..."
 echo -e $(date)
+
+# Alpha diversity metrics 
+echo -e "Calculating alpha diversity metrics" 
+for metric in 'shannon' 'observed_features' 'pielou_e'
+do 
+echo $metric
+qiime diversity alpha \
+  --i-table filtered-table.qza \
+  --p-metric $metric \
+  --o-alpha-diversity "{$metric}_vector.qza"  
+done 
+echo -e "Done calculating non-phylogenetic methods..."
+echo -e $(date)
