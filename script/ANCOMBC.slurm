@@ -40,7 +40,7 @@ echo -e "ANCOM-BC"
 # Collapse taxa based on level of taxonomy (6 for genus)
 qiime taxa collapse \
 --i-table filtered-table.qza \
---i-taxonomy taxonomy-silva.qza \
+--i-taxonomy "taxonomy-${REF_DATABASE}.qza" \
 --p-level $taxaLvl \
 --o-collapsed-table genus-table-silva.qza
 
