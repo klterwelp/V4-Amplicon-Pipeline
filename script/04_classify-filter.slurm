@@ -20,7 +20,7 @@
 # - Set script/config.sh VARIABLES
 #   - $REF_FILE -> path to trained classifier (MAYBE CHANGE NAME?? ie; SILVAclassifier)
 # OUTPUT 
-# - {REF_DATABASE}.tsv.qza / taxonomy-{REF_DATABASE}.qza (intermediate) : taxonomy table, pre-filtered
+# - {REF_DATABASE}.tsv.qza / taxonomy-{REF_DATABASE}.qza (Diversity.slurm, ANCOMBC) : taxonomy table
 # - table.qza / {REF_DATABASE}-cleaned.biom.qza (ANCOMBC, Diversity.slurm)
 # - {REF_DATABASE}-excluded.biom.qza (viz, excluded taxa table)
 # - rep-seqs.qza / {REF_DATABASE}-cleaned.fasta.qza (05_phylogeny, Diversity.slurm)
