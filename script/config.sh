@@ -40,7 +40,13 @@ DOWNPATH="/hpc/group/kimlab/Qiime2/Mentz-20221025/Mentz-20221025"
 # Diversity-ANCOM-analysis parameters 
 MAPname="map-noZymo.txt"
 # requires .txt / .tsv file extension in the variable
-metadataColumnName="Supplement-Diet-Time"
+metadataColumnNames=("col1" "col2" "col3")
+# metadataColumnNames must be in the following format: 
+# metadataColumnNames=("col1" "col2" "col3")
+# where names are surrounded in quotes and separated by ONE space
+# entire list surrounded in ()
+# ensure that the metadata column names are an EXACT MATCH with metadata file
+
 SAMPLINGdepth=10000
 
 # ----------------------- ANCOMBC Variables ---------------------------- # 
