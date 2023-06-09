@@ -13,10 +13,21 @@
 
 # PURPOSE
 # - identify and remove contaminating sequences from sequence data 
+# - more info in vignette: https://benjjneb.github.io/decontam/vignettes/decontam_intro.html
+
 # INPUT
 # - $WKPATH/03_dada2/qza/03_table.biom.qza  # table from dada2
 # - Set script/config.sh VARIABLES
 #   - $MAPname : name of metadata file 
+#   - $concCol : concentration column with concentration of each sample after cleanup
+#   - $controlCol : column that tells whether sample is negative/blank or experimental
+#   - $controlName : inside controlCol, name used for negatives (ex: "blank")
+
+# OUTPUT
+# - 03_decontam_scores.qza (intermediate)
+#   - table of scores on how likely an ASV is contamination
+# - 03_decontam_table.qza (04_classify-filter.slurm)
+#   - table of sequences after removal of contaminating sequences
 
 # ----------------- SCRIPT START -------------------- # 
 
@@ -29,11 +40,7 @@ qiime quality-control decontam-identify \
     --p-prev-control-indicator $controlName \
     --o-decontam-scores "03_decontam_scores.qza"
 
-# concentration column would be concentration of DNA in each sample, prior to pooling
-# define controls (via control column and control indicator)
-# vignette: https://benjjneb.github.io/decontam/vignettes/decontam_intro.html
-
 qiime quality-control decontam-remove \
     --i-decontam-scores "03_decontam_scores.qza" \
     --i-table "$WKPATH/03_dada2/qza/03_table.biom.qza" \
-    --o-filtered-table "decontam_table.qza" 
+    --o-filtered-table "03_decontam_table.qza" 
