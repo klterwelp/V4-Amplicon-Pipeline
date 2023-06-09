@@ -4,22 +4,107 @@
 #.             EDIT. BELOW. PARAMETERS.               #
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
 
+# ------------- GENERAL PARAMETERS ------------- #
+# parameters used for multiple scripts
+
 part_name="scavenger"
+    # partition to use for SLURM scripts
+    # default is "scavenger" partition
+    # replaced from SLURM headers during 00A_install.sh
+
 email_address="klt75@duke.edu"
+    # email address to send emails upon completion of SLURM script
+    # replaced from SLURM headers during 00A_install.sh
 
 PREFIX="Mentz-20221025"
-WKPATH="/hpc/group/kimlab/Qiime2/${PREFIX}"
-TMPDIR="/work/klt75"
+    # PILastName-YYYYMMDD
+    # Name of analysis folder 
 
-# DADA2 parameters
+WKPATH="/hpc/group/kimlab/Qiime2/${PREFIX}"
+    # Path to the analysis folder 
+
+TMPDIR="/work/klt75"
+    # Temporary work directory location 
+
+MAPname="map-noZymo.txt"
+    # enter entire path surrounded in quotes
+    # include .txt / .tsv file extension with the file name and path
+    # used for: 03_decontam, 04_classify-filter, diversity and ANCOMBC scripts
+    # not used for: 01_import, 03_dada2, 05_phylogeny 
+
+
+# ------------- DADA2 PARAMETERS ------------- # 
+# variables used for DADA2 denoising
+
  QiimeDada2FL=220
+    # position where FORWARD reads are truncated (remove 3' end)
+    # usually select position just before quality score dips
+
  QiimeDada2RL=130
+    # position where REVERSE reads are truncated (remove 3' end)
+    # usually select position just before quality score dips
+
  QiimeDada2FLeft=0
+    # position where FORWARD reads should be trimmed on 5' end
+    # usually first few beginning bases read are lower quality 
  QiimeDada2RLeft=0
+    # position where REVERSE reads should be trimmed on 5' end
+    # usually first few beginning bases read are lower quality 
+
+# ------------- DECONTAM PARAMETERS ------------- # 
+# variables used for DECONTAM removal of contaminating sequences
+concCol="ng_ul"
+    # column that contains the concentrations of samples after beads cleanup
+
+controlCol="sample_type"
+    # column name that contains whether samples are blank or not
+
+controlName="blank"
+    # in controlCol, the name used for blank/negative controls 
+
+# ------------- CLASSIFY/FILTER PARAMETERS ------------- # 
+# variables used for classifying taxonomy and filter unknown/eukaryotic seqs
 
 REF_DATABASE="silva"
-REF_FILE="/hpc/group/kimlab/Qiime2/reference/qiime2-2022.8/silva-138-99-515-806-nb-classifier.qza"
+    # name of reference database used for training classifier 
 
+REF_FILE="/hpc/group/kimlab/Qiime2/reference/qiime2-2022.8/silva-138-99-515-806-nb-classifier.qza"
+    # location of classifier used for assigning taxonomy 
+
+# ------------- DIVERSITY PARAMETERS ------------- # 
+# variables used for generating all diversity scripts
+
+# 06 DIVERSITY 
+
+# Alpha rarefaction ----
+
+QiimeMax=58245
+    # set to maximum number of reads in all samples 
+
+StepNumber=10
+    # default = 10, number of rarefaction levels between max reads and 1
+
+# Core diversity metrics ----
+
+SAMPLINGdepth=10000
+    # rarefaction depth, default is 10,000 reads. 
+    # adjust depending on rarefaction curve and beta rarefaction qzvs
+
+# 07 BETA STATS
+
+metadataColumnNames=("col1" "col2" "col3")
+    # use following format: 
+    # metadataColumnNames=("col1" "col2" "col3")
+    # column names are surrounded in quotes "" and separated by ONE space
+    # entire array surrounded in ()
+    # ensure that the metadata column names are an EXACT MATCH with metadata file
+
+# ------------- ANCOMBC PARAMETERS ------------- # 
+taxaLvl=6
+    # taxonomic level to collapse down to for ANCOMBC analysis
+    # default is 6, genus level
+
+# ------------- ARCHIVED PARAMETERS ---------- # (Delete later)
 #SET="total"
 #SET="baseline"
 #SET_SELECTION="samplefilter='keep'"
@@ -31,25 +116,7 @@ REF_FILE="/hpc/group/kimlab/Qiime2/reference/qiime2-2022.8/silva-138-99-515-806-
 # for core metrics script
 #QiimeDepth=0
 
-# for alpha rarefaction 
-QiimeMax=58245
-StepNumber=10
-
-DOWNPATH="/hpc/group/kimlab/Qiime2/Mentz-20221025/Mentz-20221025"
+#DOWNPATH="/hpc/group/kimlab/Qiime2/Mentz-20221025/Mentz-20221025"
 
 # Diversity-ANCOM-analysis parameters 
-MAPname="map-noZymo.txt"
 # requires .txt / .tsv file extension in the variable
-metadataColumnNames=("col1" "col2" "col3")
-# metadataColumnNames must be in the following format: 
-# metadataColumnNames=("col1" "col2" "col3")
-# where names are surrounded in quotes and separated by ONE space
-# entire list surrounded in ()
-# ensure that the metadata column names are an EXACT MATCH with metadata file
-
-SAMPLINGdepth=10000
-
-# ----------------------- ANCOMBC Variables ---------------------------- # 
-# taxonomic level to collapse down to for ANCOMBC analysis: 
-    # genus = 6
-taxaLvl=6
