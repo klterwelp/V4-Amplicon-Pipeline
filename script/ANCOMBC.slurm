@@ -17,8 +17,8 @@
 # - genus-table-silva.qza (change to table.qza from 04_classify-filter; add step to qiime taxa collapse)
 # - Set script/config.sh VARIABLES
 # 	- $MAPname : name of metadata file
+#   - $ANCOMBCformula : ANCOMBC formula, in R formulae format 
 #	- $metadataColumnName # ONLY IN NAMES, replace with forumla
-# 	    - SHOULD ADD: $ANCOMBCformula and use that for names
 # OUTPUT
 # - L6-ANCOMBC-$metadataColumnName.qza (intermediate)
 # - L6-ANCOMBC-TABLE-$metadataColumnName.qzv (visualizations)
@@ -33,36 +33,78 @@ source ./config.sh
 
 echo -e $(date)
 
+ANCOMBCformula=("Supplement + Diet + Time" "Supplement + Diet" "Time")
+taxaLvl=(5 6)
+
+echo -e "creating sedding variable" 
+echo -e $(date)
+
+# replace all special characters with words
+seddings="s/\+//g;"
+# replace + with nothing
+seddings+="s/\*/INT/g;"
+# replace * with INT
+seddings+="s/\-/NOT/g;"
+# replace - with NOT
+seddings+="s/\^/ORD/g;"
+# replace ^ with ORD
+seddings+="s/\//DIV/g;"
+# replace / with DIV
+seddings+="s/[^a-zA-Z0-9]//g"
+# remove rest of non alpha-num characters with nothing
+
+echo -e "finished sedding variable" 
+echo -e $(date)
+# EXPLANATION OF ABOVE:
+# += concatenates string (sedding replacement argument) to $seddings var
+# ; creates break in command, sed will take multiple replacement arguments strung together this way
+# \ used to back out of special character properties (ie; * being wildcard)
+
 #ANCOM-BC
 #Add analyses for each comparison performed in mapping files
-echo -e "ANCOM-BC"
 
+echo -e "Setting up collapsed taxa tables for ANCOMBC" 
+echo -e $(date)
+
+for lvl in "${taxaLvl[@]}"
+do
 # Collapse taxa based on level of taxonomy (6 for genus)
 qiime taxa collapse \
 --i-table filtered-table.qza \
 --i-taxonomy "taxonomy-${REF_DATABASE}.qza" \
---p-level $taxaLvl \
---o-collapsed-table genus-table-silva.qza
+--p-level $lvl \
+--o-collapsed-table "L$lvl"-table-silva.qza
+done
 
-qiime composition ancombc \
---i-table genus-table-silva.qza \
---m-metadata-file $MAPname \
---p-formula "Supplement + Diet + Time" \
-# change to $ANCOMBCformula 
---o-differentials L6-ANCOMBC-$metadataColumnName.qza
-
-#ANCOM-BC VISUALIZATION
-#Add visualizations for ANCOMBC
-echo -e "ANCOM-BC VISUALIZATION" 
+echo -e "...finished generating collapsed taxa tables for ANCOMBC" 
 echo -e $(date)
 
-qiime composition tabulate \
---i-data L6-ANCOMBC-$metadataColumnName.qza \
---o-visualization L6-ANCOMBC-TABLE-$metadataColumnName.qzv 
+echo -e "Starting ANCOMBC Analyses"
 
-qiime composition da-barplot \
---i-data L6-ANCOMBC-$metadataColumnName.qza \
---o-visualization L6-ANCOMBC-BARPLOT-$metadataColumnName.qzv 
+for formula in "${ANCOMBCformula[@]}"
+do
+ANCOMBCfolder=$(echo "$formula" | sed $seddings)
+echo -e "In $ANCOMBCfolder folder" 
+    for lvl in "${taxaLvl[@]}"
+    do
+    echo -e "ANCOMBC analysis for formula: $formula and taxonomic level : $lvl"
+    # ANCOMBC differentials
+    qiime composition ancombc \
+        --i-table "L$lvl"-table-silva.qza \
+        --m-metadata-file $MAPname \
+        --p-formula $formula \
+        --o-differentials "$ANCOMBCfolder"/"L$lvl"-ANCOMBC.qza
+    #Add visualizations for ANCOMBC
+    echo -e "ANCOMBC VISUALIZATION for formula: $formula and taxonomic level : $lvl" 
+    qiime composition tabulate \
+        --i-data "$ANCOMBCfolder"/"L$lvl"-ANCOMBC.qza \
+        --o-visualization "$ANCOMBCfolder"/"L$lvl"-table-ANCOMBC.qzv 
+
+    qiime composition da-barplot \
+        --i-data "$ANCOMBCfolder"/"L$lvl"-ANCOMBC.qza \
+        --o-visualization "$ANCOMBCfolder"/"L$lvl"-barplot-ANCOMBC.qzv 
+    done
+done
 
 echo -e "finished ANCOM-BC"
 echo -e $(date)
