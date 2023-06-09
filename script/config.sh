@@ -80,7 +80,7 @@ TABLEclassify="$WKPATH/03_dada2/qza/03_table.biom.qza"
 # ------------- DIVERSITY PARAMETERS ------------- # 
 # variables used for generating all diversity scripts
 
-# 06 DIVERSITY 
+# 06 RAREFACTION
 
 # Alpha rarefaction ----
 
@@ -90,11 +90,11 @@ QiimeMax=58245
 StepNumber=10
     # default = 10, number of rarefaction levels between max reads and 1
 
-# Core diversity metrics ----
+# 06 RAREFACTION AND DIVERSITY
 
 SAMPLINGdepth=10000
     # rarefaction depth, default is 10,000 reads. 
-    # adjust depending on rarefaction curve and beta rarefaction qzvs
+    # adjust depending on rarefaction curve and beta rarefaction qzvs from 06_rarefaction
 
 # 07 BETA STATS
 
@@ -106,9 +106,25 @@ metadataColumnNames=("col1" "col2" "col3")
     # ensure that the metadata column names are an EXACT MATCH with metadata file
 
 # ------------- ANCOMBC PARAMETERS ------------- # 
-taxaLvl=6
+taxaLvl=(5 6)
     # taxonomic level to collapse down to for ANCOMBC analysis
     # default is 6, genus level
+    # do multiple levels via: 
+    # taxaLvl=(5 6)
+    # lvl separated by ONE space
+    # entire array surrounded in ()
+    
+ANCOMBCformula=("Supplement + Diet + Time" "Supplement + Diet" "Time")
+    # Each formula in R model formulae format
+        # Additional predictor variables are added with "+"
+        # If you think the interactive variables use "*"
+        # More info: https://stat.ethz.ch/R-manual/R-devel/library/stats/html/formula.html
+    # use following format for each formula:  
+    # ANCOMBCformula=("for1" "for2" "for3")
+    # forumula surrounded in quotes "" and separated by ONE space
+    # entire array surrounded in ()
+    # ensure that the metadata column names in formula are an EXACT MATCH with metadata file
+        # column names CANNOT contain "+/-*%" because these are used in formulae  
 
 # ------------- ARCHIVED PARAMETERS ---------- # (Delete later)
 #SET="total"
