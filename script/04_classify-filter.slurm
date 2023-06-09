@@ -18,7 +18,8 @@
 # - 03_table.biom.qza (from: 03_dada2)
 # - map.txt (in meta/) -> required for excluded qzvs
 # - Set script/config.sh VARIABLES
-#   - $REF_FILE -> path to trained classifier (MAYBE CHANGE NAME?? ie; SILVAclassifier)
+#   - $REF_FILE : path to trained classifier (MAYBE CHANGE NAME?? ie; SILVAclassifier)
+#   - $TABLEclassify : ASV table to filter from, either from DADA2 or decontam 
 # OUTPUT 
 # - {REF_DATABASE}.tsv.qza / taxonomy-{REF_DATABASE}.qza (Diversity.slurm, ANCOMBC) : taxonomy table
 # - table.qza / {REF_DATABASE}-cleaned.biom.qza (ANCOMBC, Diversity.slurm)
