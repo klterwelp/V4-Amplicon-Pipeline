@@ -54,13 +54,13 @@ echo -e $(date)
 echo -e "step 04B: filter based on taxanomy, remove mitochondria & chloroplast seqs ..."
 # filter based on taxanomy, remove mitochondria & chloroplast DNAs
 qiime taxa filter-table \
-  --i-table $WKPATH/03_dada2/qza/03_table.biom.qza \
+  --i-table $TABLEclassify \
   --i-taxonomy $WKPATH/03_dada2/${REF_DATABASE}/qza/04_seq-taxonomy_${REF_DATABASE}.tsv.qza \
   --p-exclude mitochondria,chloroplast,unassigned,eukaryota \
   --o-filtered-table $WKPATH/set/${REF_DATABASE}/root/qza/04_table_root_${REF_DATABASE}-cleaned.biom.qza
 
 qiime taxa filter-table \
-  --i-table $WKPATH/03_dada2/qza/03_table.biom.qza \
+  --i-table $TABLEclassify \
   --i-taxonomy $WKPATH/03_dada2/${REF_DATABASE}/qza/04_seq-taxonomy_${REF_DATABASE}.tsv.qza \
   --p-include mitochondria,chloroplast,unassigned,eukaryota \
   --o-filtered-table $WKPATH/03_dada2/${REF_DATABASE}/qza/04_table_${REF_DATABASE}-excluded.biom.qza
