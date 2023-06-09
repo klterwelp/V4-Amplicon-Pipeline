@@ -14,7 +14,6 @@
 
 # PURPOSE
 # - Filter feature table by prevalence and abundance
-# - Generate rarefaction beta/alpha to test rarefaction depth
 # - Generate core diversity metrics based on filtered table
 # - Generate additional diversity metrics outside of core diversity 
 
@@ -25,23 +24,14 @@
 # - Set script/config.sh VARIABLES
 #   - $MAPname : metadata path
 #   - $SAMPLINGdepth : rarefaction depth, default 10,000
-#   - $QiimeMax : max rarefaction depth, usually set to max number of reads from all samples !!! change to -> $MaxDepth
-#   - $StepNumber : number of rarefaction depth steps to include between min (1) and $MaxDepth 
 
 # OUTPUT
 # - filtered-table.qza (intermediate)
 #   filtered table only contains samples that are in metadata file
 # - ab_filtered-table.qza (intermediate)
-#   abundance filtered table, removed low prevalence and low abundance features
+# - abundance filtered table, removed low prevalence and low abundance features
 # - rarefied_ab_filtered-table.qza (intermediate)
 #   rarefied abundance table, rarefied to $SAMPLINGdepth
-# - alpha-rarefaction.qzv (visualization)
-#   rarefaction curve for alpha diversity metrics 
-# - braycurtis_beta_rarefaction.qzv (visualization)
-# - jaccard_beta_rarefaction.qzv (visualization)
-# - unweighted_unifrac_beta_rarefaction.qzv (visualization)
-# - weighted_unifrac_beta_rarefaction.qzv (visualization)
-#   beta rarefaction for all beta diversity metrics 
 # - core-metrics-results/ (intermediate-qza/visualizations-qzv)
 # 		-faith_pd_vector.qza
 #		-observed_features_vector.qza 
@@ -105,38 +95,6 @@ echo -e "$(date)"
 #Diversity
 #Rerun Diversity for appropriate depth if 10,000 is insufficient or incorrect
 
-echo -e "$(date)"
-# Rarefaction, check sample depth & seq read depth sufficient or not.
-echo -e "alpha diversity, rarefaction..." 
-qiime diversity alpha-rarefaction \
-  --i-table filtered-table.qza \
-  --i-phylogeny rooted-tree.qza \
-  --p-max-depth "$QiimeMax" \
-  --p-steps "$StepNumber" \
-  --m-metadata-file "$MAPname" \
-  --o-visualization alpha-rarefaction.qzv
-
-echo -e "finished alpha rarefaction..."
-echo -e "$(date)"
-
-echo -e "beta diversity, rarefaction..." 
-
-for metrics in 'braycurtis' 'jaccard' 'unweighted_unifrac' 'weighted_unifrac'
-do 
-echo -e "${metrics} rarefaction" 
-qiime diversity beta-rarefaction \
-    --i-table filtered-table.qza \
-    --i-phylogeny rooted-tree.qza \
-    --m-metadata-file "$MAPname" \
-    --p-sampling-depth $SAMPLINGdepth \
-    --p-metric "$metrics" \
-    --o-distance-matrix "${metrics}_distance_matrix.qza" \
-    --p-clustering-method 'nj' \
-    --o-visualization "${metrics}_beta_rarefaction.qzv"
-done
-echo -e "finished beta rarefaction..."
-echo -e "$(date)"
-
 # Generate core diversity metrics 
 echo -e "Core Diversity Metrics"
 
@@ -189,3 +147,5 @@ qiime emperor biplot \
     --o-visualization deicode_emperor.qzv 
 
 echo -e "finished DEICODE calculations..." 
+echo -e "$(date)"
+
