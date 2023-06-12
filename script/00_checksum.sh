@@ -15,13 +15,8 @@ md5sum --status -c $checksums && echo OK
 #mapfile -t dataVar < <(ls *.fastq.gz) 
 # list of files in dataVar ending in fastq.gz 
 
-dataArray=(*.fastq.gz)
-if microcheck.
-for file in "${dataArray[@]}"
-do
-md5sum $file >> microcheck.md5
-done 
+md5sum *.fastq.gz > md5sum.txt 
 # makes our version of the md5 sum 
 
-md5sum --status -c microcheck.md5
+md5sum -c md5sum.txt
 # checks that since making the md5 sum none of the files are changed
