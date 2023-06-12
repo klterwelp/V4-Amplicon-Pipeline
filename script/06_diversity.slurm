@@ -24,6 +24,7 @@
 # - Set script/config.sh VARIABLES
 #   - $MAPname : metadata path
 #   - $SAMPLINGdepth : rarefaction depth, default 10,000
+# - DEICODE plugin must be installed
 
 # OUTPUT
 # - filtered-table.qza (intermediate)
