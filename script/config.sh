@@ -32,6 +32,23 @@ MAPname="map-noZymo.txt"
     # used for: 03_decontam, 04_classify-filter, diversity and ANCOMBC scripts
     # not used for: 01_import, 03_dada2, 05_phylogeny 
 
+REF_DATABASE="silva"
+    # name of reference database used for training classifier in 00_trainClassifier
+    # also used for naming the taxonomic sequences in 04_classify-filter
+
+# ------------- TRAIN CLASSIFIER PARAMETERS ------------- # 
+# variables used to train the classifier used in 04_classify-filter
+
+fPrimer=GTGCCAGCMGCCGCGGTAA
+rPrimer=GGACTACHVGGGTWTCTAAT
+    # must be 5'-> 3' orientation
+    # ensure that the sequences are only the biological primer section
+reFasta=
+    # path to database reference sequences
+    # include file name, end with : .fasta
+reTaxonomy= 
+    # path to database taxonomic classifications
+    # include file name, end with : .txt
 
 # ------------- DADA2 PARAMETERS ------------- # 
 # variables used for DADA2 denoising
@@ -64,9 +81,6 @@ controlName="blank"
 
 # ------------- CLASSIFY/FILTER PARAMETERS ------------- # 
 # variables used for classifying taxonomy and filter unknown/eukaryotic seqs
-
-REF_DATABASE="silva"
-    # name of reference database used for training classifier 
 
 REF_FILE="/hpc/group/kimlab/Qiime2/reference/qiime2-2022.8/silva-138-99-515-806-nb-classifier.qza"
     # location of classifier used for assigning taxonomy 
@@ -113,7 +127,7 @@ taxaLvl=(5 6)
     # taxaLvl=(5 6)
     # lvl separated by ONE space
     # entire array surrounded in ()
-    
+
 ANCOMBCformula=("Supplement + Diet + Time" "Supplement + Diet" "Time")
     # Each formula in R model formulae format
         # Additional predictor variables are added with "+"
