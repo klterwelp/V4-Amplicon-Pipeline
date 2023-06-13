@@ -21,11 +21,22 @@
 #   - $REF_FILE : path to trained classifier (MAYBE CHANGE NAME?? ie; SILVAclassifier)
 #   - $TABLEclassify : ASV table to filter from, either from DADA2 or decontam 
 # OUTPUT 
-# - {REF_DATABASE}.tsv.qza / taxonomy-{REF_DATABASE}.qza (Diversity.slurm, ANCOMBC) : taxonomy table
-# - table.qza / {REF_DATABASE}-cleaned.biom.qza (ANCOMBC, Diversity.slurm)
-# - {REF_DATABASE}-excluded.biom.qza (viz, excluded taxa table)
-# - rep-seqs.qza / {REF_DATABASE}-cleaned.fasta.qza (05_phylogeny, Diversity.slurm)
-# - {REF_DATABASE}-excluded.fasta.qza (viz, excluded sequences)
+# - 04_seq-taxonomy_${REF_DATABASE}.tsv.qza / taxonomy-${REF_DATABASE}.qza (Diversity.slurm, ANCOMBC)
+#   - taxonomy table based on assignments by classifier
+# - 04_table_root_${REF_DATABASE}-cleaned.biom.qza / table.qza (ANCOMBC, Diversity.slurm)
+#   - table of ASVs in samples, filtered out unassigned seq
+# - 04_table_${REF_DATABASE}-excluded.biom.qza (intermediate)
+#   - excluded ASV table
+# - 04_seq_root_${REF_DATABASE}-cleaned.fasta.qza / rep-seqs.qza (05_phylogeny, Diversity.slurm)
+#   - filtered sequences 
+# - 04_seq_${REF_DATABASE}-excluded.fasta.qza (intermediate)
+#   - excluded sequences
+# - 04_table_${REF_DATABASE}-excluded.biom.qzv (visualization)
+#   - table of sequences excluded
+# - 04_barplot_${REF_DATABASE}-excluded.biom.qzv (visualization)
+#   - barplot of excluded sequences by sample
+# - 04_table_tax_${REF_DATABASE}-excluded.tsv.qzv  (visualization)
+#   - table of taxonomies excluded (ie; eukaryotic)
 
 # ----------------- SCRIPT START -------------------- # 
 
