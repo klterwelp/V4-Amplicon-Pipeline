@@ -14,15 +14,18 @@
 # PURPOSE
 # - Run composition analysis with ANCOMBC 
 # INPUT
-# - genus-table-silva.qza (change to table.qza from 04_classify-filter; add step to qiime taxa collapse)
+# - table.qza 
+# - metadata
+# - taxonomy-${REF_DATABASE}.qza
 # - Set script/config.sh VARIABLES
 # 	- $MAPname : name of metadata file
 #   - $ANCOMBCformula : ANCOMBC formula, in R formulae format 
 #	- $metadataColumnName # ONLY IN NAMES, replace with forumla
 # OUTPUT
-# - L6-ANCOMBC-$metadataColumnName.qza (intermediate)
-# - L6-ANCOMBC-TABLE-$metadataColumnName.qzv (visualizations)
-# - L6-ANCOMBC-BARPLOT-$metadataColumnName.qzv (visualizations)
+# - $ANCOMBCfolder"/"L$lvl"-ANCOMBC.qza (intermediate)
+# - "L$lvl-table-${REF_DATABASE}".qza
+# - "$ANCOMBCfolder"/"L$lvl"-table-ANCOMBC.qzv  (visualizations)
+# - "$ANCOMBCfolder"/"L$lvl"-barplot-ANCOMBC.qzv (visualizations)
 
 # ----------------- SCRIPT START -------------------- # 
 
@@ -32,9 +35,6 @@ dos2unix ./config.sh
 source ./config.sh
 
 echo -e $(date)
-
-ANCOMBCformula=("Supplement + Diet + Time" "Supplement + Diet" "Time")
-taxaLvl=(5 6)
 
 echo -e "creating sedding variable" 
 echo -e $(date)
@@ -73,7 +73,7 @@ qiime taxa collapse \
 --i-table filtered-table.qza \
 --i-taxonomy "taxonomy-${REF_DATABASE}.qza" \
 --p-level $lvl \
---o-collapsed-table "L$lvl"-table-silva.qza
+--o-collapsed-table "L$lvl-table-${REF_DATABASE}".qza
 done
 
 echo -e "...finished generating collapsed taxa tables for ANCOMBC" 
@@ -90,8 +90,8 @@ echo -e "In $ANCOMBCfolder folder"
     echo -e "ANCOMBC analysis for formula: $formula and taxonomic level : $lvl"
     # ANCOMBC differentials
     qiime composition ancombc \
-        --i-table "L$lvl"-table-silva.qza \
-        --m-metadata-file $MAPname \
+        --i-table "L$lvl-table-${REF_DATABASE}".qza \
+        --m-metadata-file "$MAPname" \
         --p-formula $formula \
         --o-differentials "$ANCOMBCfolder"/"L$lvl"-ANCOMBC.qza
     #Add visualizations for ANCOMBC
