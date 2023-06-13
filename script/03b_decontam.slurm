@@ -40,6 +40,11 @@ qiime quality-control decontam-identify \
     --p-prev-control-indicator $controlName \
     --o-decontam-scores "03_decontam_scores.qza"
 
+qiime quality-control decontam-score-viz \
+    --i-decontam-scores "03_decontam_scores.qza" \
+    --i-table "$WKPATH/03_dada2/qza/03_table.biom.qza" \
+    --o-visualization "03_decontam_scores.qzv" 
+    
 qiime quality-control decontam-remove \
     --i-decontam-scores "03_decontam_scores.qza" \
     --i-table "$WKPATH/03_dada2/qza/03_table.biom.qza" \
