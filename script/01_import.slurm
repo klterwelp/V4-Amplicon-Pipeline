@@ -31,36 +31,69 @@ source ./config.sh
 echo -e $(date)
 echo -e "working path: " $WKPATH
 
+# if previous import folder exists, delete it 
+echo -e "checking for old folders, will remove to rerun analysis" 
+
+if [ -d "${WKPATH}/01_import" ]
+then 
+    echo -e "Previous 01_import folder exists, deleting now..." 
+    rm -Rfv -- "${WKPATH}/01_import"
+fi 
+    # -R deletes recursively, -f ignore non-existant files, -v verbose
+    # '--'' : no more flags for rm command 
+
+# making new import folders 
+echo -e "creating input and output folders" 
+mkdir -p "${WKPATH}/01_import/{qza,qzv}"
+    # -p ; make parent directories if needed
+
+# setting input/output variables
+echo -e "setting input/output variables"  
+inputDir="${WKPATH}/data/raw"
+# directory containing raw fastq.gz files 
+outputDir="${WKPATH}/01_import" 
+outputDirQZA="${WKPATH}/01_import/qza" 
+outputDirQZV="${WKPATH}/01_import/qzv"
+# directories to place results from script
+
+echo -e "Input directory is...$inputDir" 
+
+echo -e "Output directories are... 
+main folder: $outputDir
+qza: $outputDirQZA
+qzv: $outputDirQZV" 
+
+echo -e "finished setting up folders and variables" 
+echo -e "$(date)"
+
 echo -e "step 0: creating manifest file..."
-cd ${WKPATH}/data
-echo "sample-id,absolute-filepath,direction" > manifest.csv
-for i in *R1* ; do echo "${i/_S*.fastq.gz},$PWD/$i,forward"; done >> manifest.csv
-for i in *R2* ; do echo "${i/_S*.fastq.gz},$PWD/$i,reverse"; done >> manifest.csv
+cd "$inputDir" || exit
+# exits script if inputDir doesn't exist, continues if it does
+echo "sample-id,absolute-filepath,direction" > "${outputDir}/manifest.csv"
+for i in *R1* ; do echo "${i/_S*.fastq.gz},$PWD/$i,forward"; done >> "${outputDir}/manifest.csv"
+for i in *R2* ; do echo "${i/_S*.fastq.gz},$PWD/$i,reverse"; done >> "${outputDir}/manifest.csv"
 
 echo -e "finished creating manifest file."
-echo -e $(date)
+echo -e "$(date)"
 
 # importing data
 echo -e "step 1: importing paired end demultiplexed fastq.gz data..."
 
-mkdir -p ${WKPATH}/01_import/qza
-mkdir -p ${WKPATH}/01_import/qzv
-
 qiime tools import \
  --type 'SampleData[PairedEndSequencesWithQuality]' \
- --input-path $WKPATH/data/manifest.csv \
- --output-path $WKPATH/01_import/qza/01_import.fastq.qza \
+ --input-path "${outputDir}/manifest.csv" \
+ --output-path "${outputDirQZA}"/01_import.fastq.qza \
  --input-format PairedEndFastqManifestPhred33
 
 echo -e "finished importing."
-echo -e $(date)
+echo -e "$(date)"
 
 # summarizing & visualization based on demultiplexing results. can add thread option
 echo -e "step 2b: starting demux summarizing..."
 
 qiime demux summarize \
- --i-data $WKPATH/01_import/qza/01_import.fastq.qza \
- --o-visualization $WKPATH/01_import/qzv/01_import.qzv
+ --i-data "${outputDirQZA}"/01_import.fastq.qza \
+ --o-visualization "${outputDirQZV}"/01_import.qzv
 
 echo -e "finished demux summarizing."
-echo -e $(date)
+echo -e "$(date)"
