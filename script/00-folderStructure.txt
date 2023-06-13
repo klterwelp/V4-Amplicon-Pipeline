@@ -1,0 +1,48 @@
+data/
+    raw/ *read-only 
+        fastq.gz
+        README
+        .checksum
+    manifest.csv 
+meta/
+    raw/
+    clean/
+log/
+cache/
+script/
+output/
+    01-import/
+        qza/
+        qzv/ 
+    03-DADA2/
+        qza/
+        qzv/
+    03-decontam/
+        qza/
+        qzv/ 
+    04-classify/
+        qza/
+        qzv/
+    05-ANCOMBC/
+        ANCOMBC-formula/ 
+    05-phylogeny/
+        qza/ 
+    06-rarefaction/
+        alpha/
+        beta/
+    06-diversity/
+        tables/
+        core-metrics/
+            qza/
+            qzv/
+        additional-metrics/
+            qza/
+            qzv/
+    07-alphaStats/
+        group/
+        correlation/
+    07-betaStats/
+        col-name/
+report/
+    graph/
+    docs/
