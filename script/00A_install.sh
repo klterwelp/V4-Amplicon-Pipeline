@@ -16,8 +16,8 @@
 # ----------------- SCRIPT START -------------------- # 
 
 # making folders for analysis 
-mkdir -p ./{rawData,cleanData}/{data,meta}
-mkdir -p ./{log,cache,output,report}
+mkdir -p ./{log,cache,output,report,data}
+mkdir -p meta/{raw,clean}
 mkdir -p report/{graphs,docs}
 
 # load parameters from config file
