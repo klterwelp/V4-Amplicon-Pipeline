@@ -31,21 +31,63 @@
 
 # ----------------- SCRIPT START -------------------- # 
 
+dos2unix ./config.sh
+source ./config.sh
+
+# record time and method name, env vars
+echo -e "$(date)"
+echo -e "working path: " "$WKPATH"
+
+# setting input/output variables
+echo -e "setting input/output variables"  
+inputDir="${WKPATH}/output/03-dada2/qza"
+# directory containing raw fastq.gz files 
+outputDir="${WKPATH}/output/03-decontam" 
+outputDirQZA="${outputDir}/qza" 
+outputDirQZV="${outputDir}/qzv"
+# directories to place results from script
+
+# if previous output folder exists, delete it 
+echo -e "checking for old folders, will remove to rerun analysis" 
+
+if [ -d "$outputDir" ]
+then 
+    echo -e "Previous output folder exists, deleting now..." 
+    rm -Rfv -- "$outputDir"
+fi 
+    # -R deletes recursively, -f ignore non-existant files, -v verbose
+    # '--'' : no more flags for rm command 
+
+# making new import folders 
+echo -e "creating new output folders" 
+mkdir -p "${outputDir}/{qza,qzv}"
+    # -p ; make parent directories if needed
+
+echo -e "Input directory is...$inputDir" 
+
+echo -e "Output directories are... 
+main folder: $outputDir
+qza: $outputDirQZA
+qzv: $outputDirQZV" 
+
+echo -e "finished setting up folders and variables" 
+echo -e "$(date)"
+
 qiime quality-control decontam-identify \
-    --i-table "$WKPATH/03_dada2/qza/03_table.biom.qza" \
+    --i-table "$inputDir/03_table.biom.qza" \
     --m-metadata "$MAPname" \
     --p-method 'combined' \
-    --p-freq-concentration-column $concCol \
-    --p-prev-control-column $controlCol \
-    --p-prev-control-indicator $controlName \
-    --o-decontam-scores "03_decontam_scores.qza"
+    --p-freq-concentration-column "$concCol" \
+    --p-prev-control-column "$controlCol" \
+    --p-prev-control-indicator "$controlName" \
+    --o-decontam-scores "$outputDirQZA/03_decontam_scores.qza"
 
 qiime quality-control decontam-score-viz \
-    --i-decontam-scores "03_decontam_scores.qza" \
-    --i-table "$WKPATH/03_dada2/qza/03_table.biom.qza" \
-    --o-visualization "03_decontam_scores.qzv" 
+    --i-decontam-scores "$outputDirQZA/03_decontam_scores.qza" \
+    --i-table "$inputDir/03_table.biom.qza" \
+    --o-visualization "$outputDirQZV/03_decontam_scores.qzv" 
     
 qiime quality-control decontam-remove \
-    --i-decontam-scores "03_decontam_scores.qza" \
-    --i-table "$WKPATH/03_dada2/qza/03_table.biom.qza" \
-    --o-filtered-table "03_decontam_table.qza" 
+    --i-decontam-scores "$outputDirQZA/03_decontam_scores.qza" \
+    --i-table "$inputDir/03_table.biom.qza" \
+    --o-filtered-table "$outputDirQZA/03_decontam_table.qza" 
