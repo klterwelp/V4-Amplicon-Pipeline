@@ -30,37 +30,70 @@ source ./config.sh
 # record time and method name, env vars
 echo -e $(date)
 echo -e "working path: " $WKPATH
+
+# if previous import folder exists, delete it 
+echo -e "checking for old folders, will remove to rerun analysis" 
+
+if [ -d "${WKPATH}/output/03_dada2" ]
+then 
+    echo -e "Previous 03_dada2 folder exists, deleting now..." 
+    rm -Rfv -- "${WKPATH}/output/03_dada2"
+fi 
+    # -R deletes recursively, -f ignore non-existant files, -v verbose
+    # '--'' : no more flags for rm command 
+
+# making new import folders 
+echo -e "creating input and output folders" 
+mkdir -p "${WKPATH}/output/03_dada2/{qza,qzv}"
+    # -p ; make parent directories if needed
+
+# setting input/output variables
+echo -e "setting input/output variables"  
+inputDir="${WKPATH}/output/01_import/qza"
+# directory containing raw fastq.gz files 
+outputDir="${WKPATH}/output/03_dada2" 
+outputDirQZA="${WKPATH}/output/03_dada2/qza" 
+outputDirQZV="${WKPATH}/output/03_dada2/qzv"
+# directories to place results from script
+
+echo -e "Input directory is...$inputDir" 
+
+echo -e "Output directories are... 
+main folder: $outputDir
+qza: $outputDirQZA
+qzv: $outputDirQZV" 
+
+echo -e "finished setting up folders and variables" 
+echo -e "$(date)"
  
 echo -e "step 4: starting dada2 denoising..."
 
-mkdir -p ${WKPATH}/03_dada2/qza
-mkdir -p ${WKPATH}/03_dada2/qzv
-
 qiime dada2 denoise-paired \
- --i-demultiplexed-seqs $WKPATH/01_import/qza/01_import.fastq.qza \
- --p-trunc-len-f $QiimeDada2FL \
- --p-trunc-len-r $QiimeDada2RL \
- --p-trim-left-f $QiimeDada2FLeft \
- --p-trim-left-r $QiimeDada2RLeft \
- --o-denoising-stats $WKPATH/03_dada2/qza/03_dada2_stats.tsv.qza \
- --o-table $WKPATH/03_dada2/qza/03_table.biom.qza \
- --o-representative-sequences $WKPATH/03_dada2/qza/03_seq.fasta.qza \
+ --i-demultiplexed-seqs "$inputDir/01_import.fastq.qza" \
+ --p-trunc-len-f "$QiimeDada2FL" \
+ --p-trunc-len-r "$QiimeDada2RL" \
+ --p-trim-left-f "$QiimeDada2FLeft" \
+ --p-trim-left-r "$QiimeDada2RLeft" \
+ --o-denoising-stats "$outputDirQZA/03_dada2_stats.tsv.qza" \
+ --o-table "$outputDirQZA/03_table.biom.qza" \
+ --o-representative-sequences "$outputDirQZA/03_seq.fasta.qza" \
  --p-n-threads 4 \
  --verbose
+ 
 echo -e "finished dada2 denoise."
-echo -e $(date)
+echo -e "$(date)"
 
 echo -e "step 4a: export 03_dada2_seq.qzv"
 qiime feature-table tabulate-seqs \
- --i-data $WKPATH/03_dada2/qza/03_seq.fasta.qza \
- --o-visualization $WKPATH/03_dada2/qzv/03_seq.fasta.qzv
+ --i-data "$outputDirQZA/03_seq.fasta.qza" \
+ --o-visualization "$outputDirQZV/03_seq.fasta.qzv"
 
 echo -e "step 4b: export 03_dada2_stats.tsv.qzv"
 qiime metadata tabulate \
- --m-input-file $WKPATH/03_dada2/qza/03_dada2_stats.tsv.qza \
+ --m-input-file "$outputDirQZA/03_dada2_stats.tsv.qza" \
  --p-page-size 400 \
- --o-visualization $WKPATH/03_dada2/qzv/03_dada2_stats.tsv.qzv
+ --o-visualization "$outputDirQZV/03_dada2_stats.tsv.qzv"
 
 echo -e "finished dada2 qzv."
-echo -e $(date)
+echo -e "$(date)"
 
