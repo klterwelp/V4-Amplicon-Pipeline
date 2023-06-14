@@ -28,33 +28,33 @@ dos2unix ./config.sh
 source ./config.sh
 
 # record time and project path
-echo -e $(date)
+echo -e "$(date)"
 echo -e "working path: " $WKPATH
-
-# if previous import folder exists, delete it 
-echo -e "checking for old folders, will remove to rerun analysis" 
-
-if [ -d "${WKPATH}/output/01-import" ]
-then 
-    echo -e "Previous 01-import folder exists, deleting now..." 
-    rm -Rfv -- "${WKPATH}/output/01-import"
-fi 
-    # -R deletes recursively, -f ignore non-existant files, -v verbose
-    # '--'' : no more flags for rm command 
-
-# making new import folders 
-echo -e "creating input and output folders" 
-mkdir -p "${WKPATH}/output/01-import/{qza,qzv}"
-    # -p ; make parent directories if needed
 
 # setting input/output variables
 echo -e "setting input/output variables"  
 inputDir="${WKPATH}/data/raw"
 # directory containing raw fastq.gz files 
 outputDir="${WKPATH}/output/01-import" 
-outputDirQZA="${WKPATH}/output/01-import/qza" 
-outputDirQZV="${WKPATH}/output/01-import/qzv"
+outputDirQZA="${outputDir}/qza" 
+outputDirQZV="${outputDir}/qzv"
 # directories to place results from script
+
+# if previous output folder exists, delete it 
+echo -e "checking for old folders, will remove to rerun analysis" 
+
+if [ -d "$outputDir" ]
+then 
+    echo -e "Previous output folder exists, deleting now..." 
+    rm -Rfv -- "$outputDir"
+fi 
+    # -R deletes recursively, -f ignore non-existant files, -v verbose
+    # '--'' : no more flags for rm command 
+
+# making new import folders 
+echo -e "creating new output folders" 
+mkdir -p "${outputDir}/{qza,qzv}"
+    # -p ; make parent directories if needed
 
 echo -e "Input directory is...$inputDir" 
 
