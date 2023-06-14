@@ -15,28 +15,27 @@
 # - classify sequences and filter based on taxonomy (remove eukaryotic/unassigned sequences)
 # INPUT 
 # - 03_seq.fasta.qza (from: 03_dada2)
-# - 03_table.biom.qza (from: 03_dada2)
-# - map.txt (in meta/) -> required for excluded qzvs
+# - $MAPname (in meta/) -> required for excluded qzvs
 # - Set script/config.sh VARIABLES
-#   - $REF_FILE : path to trained classifier (MAYBE CHANGE NAME?? ie; SILVAclassifier)
+#   - $REF_FILE : path to trained classifier 
 #   - $TABLEclassify : ASV table to filter from, either from DADA2 or decontam 
 # OUTPUT 
-# - 04_seq-taxonomy_${REF_DATABASE}.tsv.qza / taxonomy-${REF_DATABASE}.qza (Diversity.slurm, ANCOMBC)
+# - taxonomy-${REF_DATABASE}.qza (Diversity.slurm, ANCOMBC)
 #   - taxonomy table based on assignments by classifier
-# - 04_table_root_${REF_DATABASE}-cleaned.biom.qza / table.qza (ANCOMBC, Diversity.slurm)
-#   - table of ASVs in samples, filtered out unassigned seq
-# - 04_table_${REF_DATABASE}-excluded.biom.qza (intermediate)
+# - table.qza (ANCOMBC, Diversity.slurm)
+#   - table of ASVs in samples, filtered by taxonomy
+# - excluded_table.qza (intermediate)
 #   - excluded ASV table
-# - 04_seq_root_${REF_DATABASE}-cleaned.fasta.qza / rep-seqs.qza (05_phylogeny, Diversity.slurm)
+# - rep-seqs.qza (05_phylogeny, Diversity.slurm)
 #   - filtered sequences 
-# - 04_seq_${REF_DATABASE}-excluded.fasta.qza (intermediate)
+# - excluded_rep-seqs.qza (intermediate)
 #   - excluded sequences
-# - 04_table_${REF_DATABASE}-excluded.biom.qzv (visualization)
+# - excluded_table.qzv (visualization)
 #   - table of sequences excluded
-# - 04_barplot_${REF_DATABASE}-excluded.biom.qzv (visualization)
+# - excluded_barplot.qzv (visualization)
 #   - barplot of excluded sequences by sample
-# - 04_table_tax_${REF_DATABASE}-excluded.tsv.qzv  (visualization)
-#   - table of taxonomies excluded (ie; eukaryotic)
+# - excluded_taxonomy-${REF_DATABASE}.qzv  (visualization)
+#   - table of excluded taxonomies / sequences (ie; eukaryotic)
 
 # ----------------- SCRIPT START -------------------- # 
 
@@ -45,70 +44,99 @@ dos2unix ./config.sh
 source ./config.sh
 
 # record time and method name, env vars
-echo -e $(date)
+echo -e "$(date)"
 echo -e "working path: " $WKPATH
 
-mkdir -p ${WKPATH}/03_dada2/${REF_DATABASE}/qza
-mkdir -p ${WKPATH}/03_dada2/${REF_DATABASE}/qzv
-mkdir -p ${WKPATH}/set/${REF_DATABASE}/root/qza
-mkdir -p $DOWNPATH
+# setting input/output variables
+echo -e "setting input/output variables"  
+inputDir="${WKPATH}/output/03-dada2/qza"
+# directory containing raw fastq.gz files 
+outputDir="${WKPATH}/output/04-classify"
+outputDirQZA="${outputDir}/qza" 
+outputDirQZV="${outputDir}/qzv"
+# directories to place results from script
+
+# if previous output folder exists, delete it 
+echo -e "checking for old folders, will remove to rerun analysis" 
+
+if [ -d "$outputDir" ]
+then 
+    echo -e "Previous output folder exists, deleting now..." 
+    rm -Rfv -- "$outputDir"
+fi 
+    # -R deletes recursively, -f ignore non-existant files, -v verbose
+    # '--'' : no more flags for rm command 
+
+# making new import folders 
+echo -e "creating new output folders" 
+mkdir -p "${outputDir}/{qza,qzv}"
+    # -p ; make parent directories if needed
+
+echo -e "Input directory is...$inputDir" 
+
+echo -e "Output directories are... 
+main folder: $outputDir
+qza: $outputDirQZA
+qzv: $outputDirQZV" 
+
+echo -e "finished setting up folders and variables" 
+echo -e "$(date)"
 
 # clasification, taxonomy
 echo -e "step 04A: classify-sklearn ..."
  qiime feature-classifier classify-sklearn \
-  --i-classifier $REF_FILE \
-  --i-reads $WKPATH/03_dada2/qza/03_seq.fasta.qza \
-  --o-classification $WKPATH/03_dada2/${REF_DATABASE}/qza/04_seq-taxonomy_${REF_DATABASE}.tsv.qza
+  --i-classifier "$REF_FILE" \
+  --i-reads "$inputDir/03_seq.fasta.qza" \
+  --o-classification "$outputDirQZA/taxonomy-${REF_DATABASE}.qza"
 
 echo -e "finished classify-sklearn..."
-echo -e $(date)
+echo -e "$(date)"
 
-echo -e "step 04B: filter based on taxanomy, remove mitochondria & chloroplast seqs ..."
-# filter based on taxanomy, remove mitochondria & chloroplast DNAs
+echo -e "step 04B: filter based on taxonomy, remove mitochondria & chloroplast seqs ..."
+# filter based on taxonomy, remove mitochondria & chloroplast DNAs
+
 qiime taxa filter-table \
-  --i-table $TABLEclassify \
-  --i-taxonomy $WKPATH/03_dada2/${REF_DATABASE}/qza/04_seq-taxonomy_${REF_DATABASE}.tsv.qza \
+  --i-table "$TABLEclassify" \
+  --i-taxonomy "$outputDirQZA/taxonomy-${REF_DATABASE}.qza" \
   --p-exclude mitochondria,chloroplast,unassigned,eukaryota \
-  --o-filtered-table $WKPATH/set/${REF_DATABASE}/root/qza/04_table_root_${REF_DATABASE}-cleaned.biom.qza
-
-qiime taxa filter-table \
-  --i-table $TABLEclassify \
-  --i-taxonomy $WKPATH/03_dada2/${REF_DATABASE}/qza/04_seq-taxonomy_${REF_DATABASE}.tsv.qza \
-  --p-include mitochondria,chloroplast,unassigned,eukaryota \
-  --o-filtered-table $WKPATH/03_dada2/${REF_DATABASE}/qza/04_table_${REF_DATABASE}-excluded.biom.qza
+  --o-filtered-table $outputDirQZA/table.qza
 
 qiime taxa filter-seqs \
-  --i-sequences $WKPATH/03_dada2/qza/03_seq.fasta.qza \
-  --i-taxonomy $WKPATH/03_dada2/${REF_DATABASE}/qza/04_seq-taxonomy_${REF_DATABASE}.tsv.qza \
+  --i-sequences "$inputDir"/03_seq.fasta.qza \
+  --i-taxonomy "$outputDirQZA/taxonomy-${REF_DATABASE}.qza" \
   --p-exclude mitochondria,chloroplast,unassigned,eukaryota \
-  --o-filtered-sequences $WKPATH/set/${REF_DATABASE}/root/qza/04_seq_root_${REF_DATABASE}-cleaned.fasta.qza
+  --o-filtered-sequences "$outputDirQZA"/rep-seqs.qza
+
+# generate tables with filtered taxa only 
+
+qiime taxa filter-table \
+  --i-table "$TABLEclassify" \
+  --i-taxonomy "$outputDirQZA/taxonomy-${REF_DATABASE}.qza" \
+  --p-include mitochondria,chloroplast,unassigned,eukaryota \
+  --o-filtered-table "$outputDirQZA"/excluded_table.qza
  
 qiime taxa filter-seqs \
-  --i-sequences $WKPATH/03_dada2/qza/03_seq.fasta.qza \
-  --i-taxonomy $WKPATH/03_dada2/${REF_DATABASE}/qza/04_seq-taxonomy_${REF_DATABASE}.tsv.qza \
+  --i-sequences "$inputDir"/03_seq.fasta.qza \
+  --i-taxonomy "$outputDirQZA/taxonomy-${REF_DATABASE}.qza" \
   --p-include mitochondria,chloroplast,unassigned,eukaryota \
-  --o-filtered-sequences $WKPATH/03_dada2/${REF_DATABASE}/qza/04_seq_${REF_DATABASE}-excluded.fasta.qza
+  --o-filtered-sequences "$outputDirQZA"/excluded_rep-seqs.qza
 
-# visualizations
+# visualizations of taxa excluded from final sequences and table
+
 qiime feature-table summarize \
- --i-table $WKPATH/03_dada2/${REF_DATABASE}/qza/04_table_${REF_DATABASE}-excluded.biom.qza \
- --m-sample-metadata-file $WKPATH/meta/map.txt \
- --o-visualization $WKPATH/03_dada2/${REF_DATABASE}/qzv/04_table_${REF_DATABASE}-excluded.biom.qzv
+ --i-table "$outputDirQZA"/excluded_table.qza \
+ --m-sample-metadata-file "$MAPname" \
+ --o-visualization "$outputDirQZV"/excluded_table.qzv
  
 qiime taxa barplot \
-  --i-table $WKPATH/03_dada2/${REF_DATABASE}/qza/04_table_${REF_DATABASE}-excluded.biom.qza \
-  --i-taxonomy $WKPATH/03_dada2/${REF_DATABASE}/qza/04_seq-taxonomy_${REF_DATABASE}.tsv.qza \
-  --m-metadata-file $WKPATH/meta/map.txt \
-  --o-visualization $WKPATH/03_dada2/${REF_DATABASE}/qzv/04_barplot_${REF_DATABASE}-excluded.biom.qzv 
+  --i-table "$outputDirQZA"/excluded_table.qza \
+  --i-taxonomy "$outputDirQZA/taxonomy-${REF_DATABASE}.qza" \
+  --m-metadata-file "$MAPname" \
+  --o-visualization "$outputDirQZV"/excluded_barplot.qzv 
   
 qiime metadata tabulate \
-  --m-input-file $WKPATH/03_dada2/${REF_DATABASE}/qza/04_seq-taxonomy_${REF_DATABASE}.tsv.qza $WKPATH/03_dada2/${REF_DATABASE}/qza/04_seq_${REF_DATABASE}-excluded.fasta.qza \
-  --o-visualization $WKPATH/03_dada2/${REF_DATABASE}/qzv/04_table_tax_${REF_DATABASE}-excluded.tsv.qzv  
+  --m-input-file "$outputDirQZA/taxonomy-${REF_DATABASE}.qza" $outputDirQZA/excluded_rep-seqs.qza \
+  --o-visualization "$outputDirQZV/excluded_taxonomy-${REF_DATABASE}.qzv"  
   
-# export files for downstream analysis
-cp $WKPATH/set/${REF_DATABASE}/root/qza/04_table_root_${REF_DATABASE}-cleaned.biom.qza $DOWNPATH/table.qza
-cp $WKPATH/set/${REF_DATABASE}/root/qza/04_seq_root_${REF_DATABASE}-cleaned.fasta.qza $DOWNPATH/rep-seqs.qza
-cp $WKPATH/03_dada2/${REF_DATABASE}/qza/04_seq-taxonomy_${REF_DATABASE}.tsv.qza $DOWNPATH/taxonomy-${REF_DATABASE}.qza
-
- echo -e "finished filter based on taxanomy..."
- echo -e $(date)
+ echo -e "finished filter based on taxonomy..."
+ echo -e "$(date)"
