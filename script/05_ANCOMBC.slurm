@@ -14,19 +14,20 @@
 # PURPOSE
 # - Run composition analysis with ANCOMBC 
 # INPUT
-# - table.qza 
-# - metadata
-# - taxonomy-${REF_DATABASE}.qza
+# - table.qza (04_classify-filter)
+# - metadata 
+# - taxonomy-${REF_DATABASE}.qza (04_classify-filter)
 # - Set script/config.sh VARIABLES
 # 	- $MAPname : name of metadata file
 #   - $ANCOMBCformula : ANCOMBC formula, in R formulae format 
 #	- $metadataColumnName # ONLY IN NAMES, replace with forumla
 # OUTPUT
-# - $ANCOMBCfolder"/"L$lvl"-ANCOMBC.qza (intermediate)
+# - filtered-table.qza
 # - "L$lvl-table-${REF_DATABASE}".qza
-# - "$ANCOMBCfolder"/"L$lvl"-table-ANCOMBC.qzv  (visualizations)
-# - "$ANCOMBCfolder"/"L$lvl"-barplot-ANCOMBC.qzv (visualizations)
-
+# - $ANCOMBCfolder"/
+#   - "L$lvl"-ANCOMBC.qza (intermediate)
+#   - "L$lvl"-table-ANCOMBC.qzv  (visualizations)
+#   - "L$lvl"-barplot-ANCOMBC.qzv (visualizations)
 # ----------------- SCRIPT START -------------------- # 
 
 # Source variable names from config.sh
@@ -34,10 +35,40 @@ echo -e "Source variable names from config.sh"
 dos2unix ./config.sh
 source ./config.sh
 
-echo -e $(date)
+echo -e "$(date)"
+# setting input/output variables
+echo -e "setting input/output variables"  
+inputDir="${WKPATH}/output/04-classify/qza"
+# directory containing raw fastq.gz files 
+outputDir="${WKPATH}/output/05-ancombc"
+# directory to place results from script
+
+# if previous output folder exists, delete it 
+echo -e "checking for old folders, will remove to rerun analysis" 
+
+if [ -d "$outputDir" ]
+then 
+    echo -e "Previous output folder exists, deleting now..." 
+    rm -Rfv -- "$outputDir"
+fi 
+    # -R deletes recursively, -f ignore non-existant files, -v verbose
+    # '--'' : no more flags for rm command 
+
+# making new import folders 
+echo -e "creating new output folders" 
+mkdir -p "${outputDir}"
+    # -p ; make parent directories if needed
+
+echo -e "Input directory is...$inputDir" 
+
+echo -e "Output directory is... 
+main folder: $outputDir"
+
+echo -e "finished setting up folders and variables" 
+echo -e "$(date)"
 
 echo -e "creating sedding variable" 
-echo -e $(date)
+echo -e "$(date)"
 
 # replace all special characters with words
 seddings="s/\+//g;"
@@ -54,7 +85,7 @@ seddings+="s/[^a-zA-Z0-9]//g"
 # remove rest of non alpha-num characters with nothing
 
 echo -e "finished sedding variable" 
-echo -e $(date)
+echo -e "$(date)"
 # EXPLANATION OF ABOVE:
 # += concatenates string (sedding replacement argument) to $seddings var
 # ; creates break in command, sed will take multiple replacement arguments strung together this way
@@ -62,22 +93,28 @@ echo -e $(date)
 
 #ANCOM-BC
 #Add analyses for each comparison performed in mapping files
+echo -e "filtering table by metadata" 
+
+qiime feature-table filter-samples \
+    --i-table "$inputDir"/table.qza \
+    --m-metadata-file "$MAPname" \
+    --o-filtered-table "$outputDir"/filtered-table.qza
 
 echo -e "Setting up collapsed taxa tables for ANCOMBC" 
-echo -e $(date)
+echo -e "$(date)"
 
 for lvl in "${taxaLvl[@]}"
 do
 # Collapse taxa based on level of taxonomy (6 for genus)
 qiime taxa collapse \
---i-table filtered-table.qza \
---i-taxonomy "taxonomy-${REF_DATABASE}.qza" \
---p-level $lvl \
---o-collapsed-table "L$lvl-table-${REF_DATABASE}".qza
+--i-table "$outputDir"/filtered-table.qza \
+--i-taxonomy "$inputDir/taxonomy-${REF_DATABASE}.qza" \
+--p-level "$lvl" \
+--o-collapsed-table "$outputDir/L$lvl-table-${REF_DATABASE}".qza
 done
 
 echo -e "...finished generating collapsed taxa tables for ANCOMBC" 
-echo -e $(date)
+echo -e "$(date)"
 
 echo -e "Starting ANCOMBC Analyses"
 
@@ -90,23 +127,24 @@ echo -e "In $ANCOMBCfolder folder"
     echo -e "ANCOMBC analysis for formula: $formula and taxonomic level : $lvl"
     # ANCOMBC differentials
     qiime composition ancombc \
-        --i-table "L$lvl-table-${REF_DATABASE}".qza \
+        --i-table "$outputDir/L$lvl-table-${REF_DATABASE}".qza \
         --m-metadata-file "$MAPname" \
         --p-formula $formula \
-        --o-differentials "$ANCOMBCfolder"/"L$lvl"-ANCOMBC.qza
+        --o-differentials "$outputDir/$ANCOMBCfolder/L$lvl"-ANCOMBC.qza
+
     #Add visualizations for ANCOMBC
     echo -e "ANCOMBC VISUALIZATION for formula: $formula and taxonomic level : $lvl" 
     qiime composition tabulate \
-        --i-data "$ANCOMBCfolder"/"L$lvl"-ANCOMBC.qza \
-        --o-visualization "$ANCOMBCfolder"/"L$lvl"-table-ANCOMBC.qzv 
+        --i-data "$outputDir/$ANCOMBCfolder/L$lvl"-ANCOMBC.qza \
+        --o-visualization "$outputDir/$ANCOMBCfolder/L$lvl"-table-ANCOMBC.qzv 
 
     qiime composition da-barplot \
-        --i-data "$ANCOMBCfolder"/"L$lvl"-ANCOMBC.qza \
-        --o-visualization "$ANCOMBCfolder"/"L$lvl"-barplot-ANCOMBC.qzv 
+        --i-data "$outputDir/$ANCOMBCfolder/L$lvl"-ANCOMBC.qza \
+        --o-visualization "$outputDir/$ANCOMBCfolder/L$lvl"-barplot-ANCOMBC.qzv 
     done
 done
 
 echo -e "finished ANCOM-BC"
-echo -e $(date)
+echo -e "$(date)"
 
 
