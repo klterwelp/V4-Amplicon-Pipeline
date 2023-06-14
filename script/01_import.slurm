@@ -51,7 +51,7 @@ mkdir -p "${WKPATH}/output/01_import/{qza,qzv}"
 echo -e "setting input/output variables"  
 inputDir="${WKPATH}/data/raw"
 # directory containing raw fastq.gz files 
-outputDir="${WKPATH}/01_import" 
+outputDir="${WKPATH}/output/01_import" 
 outputDirQZA="${WKPATH}/output/01_import/qza" 
 outputDirQZV="${WKPATH}/output/01_import/qzv"
 # directories to place results from script
