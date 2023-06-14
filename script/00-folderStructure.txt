@@ -23,7 +23,7 @@ output/
     04-classify/
         qza/
         qzv/
-    05-ANCOMBC/
+    05-ancombc/
         ANCOMBC-formula/ 
     05-phylogeny/
         qza/ 
