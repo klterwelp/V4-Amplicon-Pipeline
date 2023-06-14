@@ -34,26 +34,26 @@ echo -e "working path: " $WKPATH
 # if previous import folder exists, delete it 
 echo -e "checking for old folders, will remove to rerun analysis" 
 
-if [ -d "${WKPATH}/output/01_import" ]
+if [ -d "${WKPATH}/output/01-import" ]
 then 
-    echo -e "Previous 01_import folder exists, deleting now..." 
-    rm -Rfv -- "${WKPATH}/output/01_import"
+    echo -e "Previous 01-import folder exists, deleting now..." 
+    rm -Rfv -- "${WKPATH}/output/01-import"
 fi 
     # -R deletes recursively, -f ignore non-existant files, -v verbose
     # '--'' : no more flags for rm command 
 
 # making new import folders 
 echo -e "creating input and output folders" 
-mkdir -p "${WKPATH}/output/01_import/{qza,qzv}"
+mkdir -p "${WKPATH}/output/01-import/{qza,qzv}"
     # -p ; make parent directories if needed
 
 # setting input/output variables
 echo -e "setting input/output variables"  
 inputDir="${WKPATH}/data/raw"
 # directory containing raw fastq.gz files 
-outputDir="${WKPATH}/output/01_import" 
-outputDirQZA="${WKPATH}/output/01_import/qza" 
-outputDirQZV="${WKPATH}/output/01_import/qzv"
+outputDir="${WKPATH}/output/01-import" 
+outputDirQZA="${WKPATH}/output/01-import/qza" 
+outputDirQZV="${WKPATH}/output/01-import/qzv"
 # directories to place results from script
 
 echo -e "Input directory is...$inputDir" 

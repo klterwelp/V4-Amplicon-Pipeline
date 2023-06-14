@@ -14,7 +14,7 @@ output/
     01-import/
         qza/
         qzv/ 
-    03-DADA2/
+    03-dada2/
         qza/
         qzv/
     03-decontam/

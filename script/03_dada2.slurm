@@ -34,26 +34,26 @@ echo -e "working path: " $WKPATH
 # if previous import folder exists, delete it 
 echo -e "checking for old folders, will remove to rerun analysis" 
 
-if [ -d "${WKPATH}/output/03_dada2" ]
+if [ -d "${WKPATH}/output/03-dada2" ]
 then 
-    echo -e "Previous 03_dada2 folder exists, deleting now..." 
-    rm -Rfv -- "${WKPATH}/output/03_dada2"
+    echo -e "Previous 03-dada2 folder exists, deleting now..." 
+    rm -Rfv -- "${WKPATH}/output/03-dada2"
 fi 
     # -R deletes recursively, -f ignore non-existant files, -v verbose
     # '--'' : no more flags for rm command 
 
 # making new import folders 
 echo -e "creating input and output folders" 
-mkdir -p "${WKPATH}/output/03_dada2/{qza,qzv}"
+mkdir -p "${WKPATH}/output/03-dada2/{qza,qzv}"
     # -p ; make parent directories if needed
 
 # setting input/output variables
 echo -e "setting input/output variables"  
-inputDir="${WKPATH}/output/01_import/qza"
+inputDir="${WKPATH}/output/01-import/qza"
 # directory containing raw fastq.gz files 
-outputDir="${WKPATH}/output/03_dada2" 
-outputDirQZA="${WKPATH}/output/03_dada2/qza" 
-outputDirQZV="${WKPATH}/output/03_dada2/qzv"
+outputDir="${WKPATH}/output/03-dada2" 
+outputDirQZA="${WKPATH}/output/03-dada2/qza" 
+outputDirQZV="${WKPATH}/output/03-dada2/qzv"
 # directories to place results from script
 
 echo -e "Input directory is...$inputDir" 
@@ -79,7 +79,7 @@ qiime dada2 denoise-paired \
  --o-representative-sequences "$outputDirQZA/03_seq.fasta.qza" \
  --p-n-threads 4 \
  --verbose
- 
+
 echo -e "finished dada2 denoise."
 echo -e "$(date)"
 
