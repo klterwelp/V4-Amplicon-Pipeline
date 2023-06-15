@@ -18,9 +18,9 @@
 # - Generate additional diversity metrics outside of core diversity 
 
 # INPUT
-# - table.qza 
-# - rooted-tree.qza
-# -taxonomy-${REF_DATABASE}.qza
+# - table.qza (04-classify)
+# - rooted-tree.qza (05-phylogeny)
+# -taxonomy-${REF_DATABASE}.qza (04-classify)
 # - Set script/config.sh VARIABLES
 #   - $MAPname : metadata path
 #   - $SAMPLINGdepth : rarefaction depth, default 10,000
@@ -68,27 +68,62 @@ echo -e "Source variable names from config.sh"
 dos2unix ./config.sh
 source ./config.sh
 
-# record time and method name, env vars
+# setting input/output variables
+echo -e "setting input/output variables"  
+inputTax="${WKPATH}/output/04-classify"
+inputPhylo="${WKPATH}/output/05-phylogeny"
+# directory containing raw fastq.gz files 
+outputDir="${WKPATH}/output/06-diversity"
+outputDirTbl="${outputDir}/tables" 
+outputDirAdd="${outputDir}/additional-metrics"
+# directories to place results from script
+
+# if previous output folder exists, delete it 
+echo -e "checking for old folders, will remove to rerun analysis" 
+
+if [ -d "$outputDir" ]
+then 
+    echo -e "Previous output folder exists, deleting now..." 
+    rm -Rfv -- "$outputDir"
+fi 
+    # -R deletes recursively, -f ignore non-existant files, -v verbose
+    # '--'' : no more flags for rm command 
+
+# making new import folders 
+echo -e "creating new output folders" 
+mkdir -p "${outputDir}/{tables,additional-metrics}"
+    # -p ; make parent directories if needed
+
+echo -e "Input directories are...
+taxonomic/seq: $inputTax
+phylogeny: $inputPhylo" 
+
+echo -e "Output directories are... 
+main folder: $outputDir
+tables: $outputDirTbl
+additional metrics: $outputDirAdd" 
+
+echo -e "finished setting up folders and variables" 
 echo -e "$(date)"
 
 #Pre-prep for all analyses
 echo -e "Beginning file prep for downstream analyses"
 
 qiime feature-table filter-samples \
-    --i-table table.qza \
+    --i-table "$inputTax/table.qza" \
     --m-metadata-file "$MAPname" \
-    --o-filtered-table filtered-table.qza
+    --o-filtered-table "$outputDirTbl/filtered-table.qza"
 
 qiime feature-table filter-features-conditionally \
-    --i-table filtered-table.qza \
+    --i-table "$outputDirTbl/filtered-table.qza" \
     --p-prevalence 0.1 \
     --p-abundance 0.01 \
-    --o-filtered-table ab_filtered-table.qza
+    --o-filtered-table "$outputDirTbl/ab_filtered-table.qza"
 
 qiime feature-table rarefy \
-    --i-table ab_filtered-table.qza \
-    --p-sampling-depth $SAMPLINGdepth \
-    --o-rarefied-table rarefied_ab_filtered-table.qza
+    --i-table "$outputDirTbl/ab_filtered-table.qza" \
+    --p-sampling-depth "$SAMPLINGdepth" \
+    --o-rarefied-table "$outputDirTbl/rarefied_ab_filtered-table.qza"
 
 echo -e "finished file prep"
 echo -e "$(date)"
@@ -100,31 +135,31 @@ echo -e "$(date)"
 echo -e "Core Diversity Metrics"
 
 qiime diversity core-metrics-phylogenetic \
-    --i-phylogeny rooted-tree.qza \
-    --i-table filtered-table.qza \
-    --p-sampling-depth $SAMPLINGdepth \
-    --m-metadata-file $MAPname \
-    --output-dir core-metrics-results
+    --i-phylogeny "$inputPhylo/rooted-tree.qza" \
+    --i-table "$outputDirTbl/filtered-table.qza" \
+    --p-sampling-depth "$SAMPLINGdepth" \
+    --m-metadata-file "$MAPname" \
+    --output-dir "$outputDir/core-metrics-results"
 
 echo -e "finished core diversity metrics"
-echo -e $(date)
+echo -e "$(date)"
 
 # Generate abundance filtered jaccard 
 echo -e "Additional Diversity Metrics"
 
 qiime diversity beta \
-    --i-table rarefied_ab_filtered-table.qza \
+    --i-table "$outputDirTbl/rarefied_ab_filtered-table.qza" \
     --p-metric 'jaccard' \
-    --o-distance-matrix 'abfilter_jaccard_distance_matrix.qza'
+    --o-distance-matrix "$outputDirAdd/abfilter_jaccard_distance_matrix.qza"
 
 qiime diversity pcoa \
-    --i-distance-matrix 'abfilter_jaccard_distance_matrix.qza' \
-    --o-pcoa 'abfilter_jaccard_pcoa_results.qza'
+    --i-distance-matrix "$outputDirAdd/abfilter_jaccard_distance_matrix.qza" \
+    --o-pcoa "$outputDirAdd/abfilter_jaccard_pcoa_results.qza"
 
 qiime emperor plot \
-    --i-pcoa 'abfilter_jaccard_pcoa_results.qza' \
-    --m-metadata-file $MAPname \
-    --o-visualization abfilter_jaccard_emperor.qzv
+    --i-pcoa "$outputDirAdd/abfilter_jaccard_pcoa_results.qza" \
+    --m-metadata-file "$MAPname" \
+    --o-visualization "$outputDirAdd/abfilter_jaccard_emperor.qzv"
 
 echo -e "finished abundance filtered jaccard" 
 # jaccard is sensitive to rare taxa, filtered jaccard used to see if rare taxa changed results
@@ -134,16 +169,17 @@ echo -e "$(date)"
 echo -e "Robust Aitchison PCA (DEICODE), compositional beta diversity" 
 # doesn't recommend rarefaction or taxa collapse 
 # requires plugin for DEICODE
+# only used for cross-sectional data, need to use TEMPTED or CTF
 
 qiime deicode rpca \
-    --i-table filtered-table.qza \
-    --o-biplot deicode_biplot_results.qza \
-    --o-distance-matrix deicode_distance_matrix.qza
+    --i-table "$outputDirTbl/filtered-table.qza" \
+    --o-biplot "$outputDirAdd/deicode_biplot_results.qza" \
+    --o-distance-matrix "$outputDirAdd/deicode_distance_matrix.qza"
 
 qiime emperor biplot \
-    --i-biplot deicode_biplot_results.qza \
-    --m-sample-metadata-file $MAPname \
-    --m-feature-metadata-file "taxonomy-${REF_DATABASE}.qza" \
+    --i-biplot "$outputDirAdd/deicode_biplot_results.qza" \
+    --m-sample-metadata-file "$MAPname" \
+    --m-feature-metadata-file "$inputTax/taxonomy-${REF_DATABASE}.qza" \
     --p-number-of-features "${featureNum}" \
     --o-visualization deicode_emperor.qzv 
 
