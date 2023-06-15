@@ -121,6 +121,8 @@ echo -e "Starting ANCOMBC Analyses"
 for formula in "${ANCOMBCformula[@]}"
 do
 ANCOMBCfolder=$(echo "$formula" | sed $seddings)
+ANCOMBCoutput="$outputDir/$ANCOMBCfolder"
+mkdir "$ANCOMBCoutput"
 echo -e "In $ANCOMBCfolder folder" 
     for lvl in "${taxaLvl[@]}"
     do
@@ -130,21 +132,21 @@ echo -e "In $ANCOMBCfolder folder"
         --i-table "$outputDir/L$lvl-table-${REF_DATABASE}".qza \
         --m-metadata-file "$MAPname" \
         --p-formula $formula \
-        --o-differentials "$outputDir/$ANCOMBCfolder/L$lvl"-ANCOMBC.qza
+        --o-differentials "$ANCOMBCoutput/L$lvl"-ANCOMBC.qza
 
     #Add visualizations for ANCOMBC
     echo -e "ANCOMBC VISUALIZATION for formula: $formula and taxonomic level : $lvl" 
     qiime composition tabulate \
-        --i-data "$outputDir/$ANCOMBCfolder/L$lvl"-ANCOMBC.qza \
-        --o-visualization "$outputDir/$ANCOMBCfolder/L$lvl"-table-ANCOMBC.qzv 
+        --i-data "$ANCOMBCoutput/L$lvl"-ANCOMBC.qza \
+        --o-visualization "$ANCOMBCoutput/L$lvl"-table-ANCOMBC.qzv 
 
     qiime composition da-barplot \
-        --i-data "$outputDir/$ANCOMBCfolder/L$lvl"-ANCOMBC.qza \
-        --o-visualization "$outputDir/$ANCOMBCfolder/L$lvl"-barplot-ANCOMBC.qzv 
+        --i-data "$ANCOMBCoutput/L$lvl"-ANCOMBC.qza \
+        --o-visualization "$ANCOMBCoutput/L$lvl"-barplot-ANCOMBC.qzv 
     done
 done
 
-echo -e "finished ANCOM-BC"
+echo -e "finished ANCOMBC"
 echo -e "$(date)"
 
 
