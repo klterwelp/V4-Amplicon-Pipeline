@@ -27,26 +27,48 @@
 dos2unix ./config.sh
 source ./config.sh
 
-# phylogeny
+# setting input/output variables
+echo -e "setting input/output variables"  
+inputDir="${WKPATH}/output/04-classify/qza"
+# directory containing raw fastq.gz files 
+outputDir="${WKPATH}/output/05-phylogeny"
+outputDirQZA="${outputDir}/qza" 
+# directories to place results from script
+
+# if previous output folder exists, delete it 
+echo -e "checking for old folders, will remove to rerun analysis" 
+
+if [ -d "$outputDir" ]
+then 
+    echo -e "Previous output folder exists, deleting now..." 
+    rm -Rfv -- "$outputDir"
+fi 
+    # -R deletes recursively, -f ignore non-existant files, -v verbose
+    # '--'' : no more flags for rm command 
+
+# making new import folders 
+echo -e "creating new output folders" 
+mkdir -p "${outputDir}/qza"
+    # -p ; make parent directories if needed
+
+echo -e "Input directory is...$inputDir" 
+
+echo -e "Output directories are... 
+main folder: $outputDir
+qza: $outputDirQZA"
+
+echo -e "finished setting up folders and variables" 
+echo -e "$(date)"
+
+# Phylogeny
 echo -e "step 05: Begin Construction of Phylogenetic Tree"
-echo -e $(date)
+echo -e "$(date)"
 qiime phylogeny align-to-tree-mafft-iqtree \
---i-sequences rep-seqs.qza \
---o-alignment aligned-rep-seqs.qza \
---o-masked-alignment masked-alignment-rep-seqs.qza \
---o-tree unrooted-tree.qza \
---o-rooted-tree rooted-tree.qza
+--i-sequences "$inputDir/rep-seqs.qza" \
+--o-alignment "${outputDir}/aligned-rep-seqs.qza" \
+--o-masked-alignment "${outputDir}/masked-alignment-rep-seqs.qza" \
+--o-tree "${outputDir}/unrooted-tree.qza" \
+--o-rooted-tree "${outputDir}/rooted-tree.qza"
 
 echo -e "Finished Construction of Phylogenetic Tree"
-echo -e $(date)
-
-# Move final outputs to data analysis folder 
-echo -e "Moving final outputs to data analysis folders"
-echo -e $(date)
-
-mkdir Core_Analysis_Files/Tables
-mkdir Core_Analysis_Files/Sequences
-mkdir Core_Analysis_Files/Phylogenetic_Trees
-mv aligned-rep-seps.qza Core_Analysis_Files/Sequences
-mv masked-alignment-rep-seqs.qza Core_Analysis_files/Sequences
-mv unrooted-tree.qza Core_Analysis_Files/Phylogenetic_Trees
+echo -e "$(date)"
