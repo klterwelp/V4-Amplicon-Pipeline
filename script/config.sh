@@ -110,6 +110,8 @@ SAMPLINGdepth=10000
     # rarefaction depth, default is 10,000 reads. 
     # adjust depending on rarefaction curve and beta rarefaction qzvs from 06_rarefaction
 
+# 06 DIVERSITY 
+featureNum=8
 # 07 BETA STATS
 
 metadataColumnNames=("col1" "col2" "col3")
