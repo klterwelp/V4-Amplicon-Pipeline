@@ -2,8 +2,7 @@ data/
     raw/ *read-only 
         fastq.gz
         README
-        .checksum
-    manifest.csv 
+        .checksum 
 meta/
     raw/
     clean/
@@ -12,6 +11,7 @@ cache/
 script/
 output/
     01-import/
+        manifest.csv
         qza/
         qzv/ 
     03-dada2/
