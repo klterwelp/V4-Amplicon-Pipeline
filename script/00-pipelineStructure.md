@@ -1,20 +1,20 @@
 # Pipeline Structure
 ## 01_import 
-PURPOSE
+### PURPOSE
 - import demultiplexed pair end fastq.gz sequences into QIIME2
-INPUT
+### INPUT
 - demultiplexed paired-end fastq.gz sequences in data folder 
-OUTPUT
+### OUTPUT
 - manifest.csv (intermediate)
 - 01_import.fastq.qza (used in 03_dada2)
 - 01_import.qzv (check seq quality)
 
 ## 03_dada2
-PURPOSE
+### PURPOSE
 - quality trim, filter, denoise sequences, chimera removal, and merging of paired end reads. 
-INPUT
+### INPUT
 - 01_import.fastq.qza (from: 01_import)
-OUTPUT
+### OUTPUT
 - 03_dada2_stats.tsv.qza (intermediate)
 - 03_table.biom.qza (03b_decontam, 04_classify-filter)
 - 03_seq.fasta.qza  (04_classify-filter)
@@ -22,22 +22,22 @@ OUTPUT
 - 03_dada2_stats.tsv.qzv (check # of reads passing filters)
 
 ## 03b_decontam
-PURPOSE
+### PURPOSE
 - identify and remove contaminating sequences from sequence data 
-INPUT
+### INPUT
 - 03_table.biom.qza  # table from dada2
-OUTPUT
+### OUTPUT
 - 03_decontam_scores.qza (intermediate)
     - table of scores on how likely an ASV is contamination
 - 03_decontam_table.qza (04_classify-filter.slurm)
     - table of sequences after removal of contaminating sequences
 
 ## 04_classify-filter
-PURPOSE
+### PURPOSE
 - classify sequences and filter based on taxonomy (remove eukaryotic/unassigned sequences)
-INPUT 
+### INPUT 
 - 03_seq.fasta.qza (03_dada2)
-OUTPUT 
+### OUTPUT 
 - taxonomy-${REF_DATABASE}.qza (Diversity.slurm, ANCOMBC)
     - taxonomy table based on assignments by classifier
 - table.qza (ANCOMBC, Diversity.slurm)
@@ -54,14 +54,13 @@ OUTPUT
     - barplot of excluded sequences by sample
 - excluded_taxonomy-${REF_DATABASE}.qzv  (visualization)
     - table of excluded taxonomies / sequences (ie; eukaryotic)
-
 ## 05_ANCOMBC
-PURPOSE
+### PURPOSE
 - Run composition analysis with ANCOMBC 
-INPUT
+### INPUT
 - table.qza (04_classify-filter)
 - taxonomy-${REF_DATABASE}.qza (04_classify-filter)
-OUTPUT
+### OUTPUT
 - filtered-table.qza
 - "L$lvl-table-${REF_DATABASE}".qza
 - $ANCOMBCfolder"/
@@ -70,11 +69,11 @@ OUTPUT
     - "L$lvl"-barplot-ANCOMBC.qzv (visualizations)
 
 ## 06_rarefaction
-PURPOSE
+### PURPOSE
 - Filter feature table by prevalence and abundance
 - Generate rarefaction beta/alpha to test rarefaction depth
 
-# INPUT
+### INPUT
 - table.qza 
 - rooted-tree.qza
 - Set script/config.sh VARIABLES
@@ -83,7 +82,7 @@ PURPOSE
    - $QiimeMax : max rarefaction depth, usually set to max number of reads from all samples !!! change to -> $MaxDepth
    - $StepNumber : number of rarefaction depth steps to include between min (1) and $MaxDepth 
 
-# OUTPUT
+### OUTPUT
 - filtered-table.qza (intermediate)
    -filtered table only contains samples that are in metadata file
 - alpha-rarefaction.qzv (visualization)
@@ -95,13 +94,13 @@ PURPOSE
    -beta rarefaction for all beta diversity metrics 
 
 ## 06_diversity
-PURPOSE
+### PURPOSE
 - Filter feature table by prevalence and abundance
 - Generate core diversity metrics based on filtered table
 - Generate additional diversity metrics outside of core diversity 
     - abundance filtered jaccard, DEICODE
 
-INPUT
+### INPUT
 - table.qza (04-classify)
 - rooted-tree.qza (05-phylogeny)
 -taxonomy-${REF_DATABASE}.qza (04-classify)
@@ -110,7 +109,7 @@ INPUT
      - $SAMPLINGdepth : rarefaction depth, default 10,000
 - DEICODE plugin must be installed
 
-OUTPUT
+### OUTPUT
 - filtered-table.qza (intermediate)
     - filtered table only contains samples that are in metadata file
 - ab_filtered-table.qza (intermediate)
@@ -149,14 +148,14 @@ OUTPUT
         *add gemmeli / TEMPTED instead of DEICODE*
 
 ## 07_alphaStats
-PURPOSE
+### PURPOSE
  - Test statistical signficant differences for alpha diversity based on numeric/categorical metadata
 
-INPUT
+### INPUT
  - table.qza (04_classify-filter)
  - rooted-tree.qza (05_phylogeny)
 
-OUTPUT
+### OUTPUT
  - alpha-group-signifance/	(visualizations)								
   	- faith-pd-group-significance.qzv	
  		-evenness-group-significance.qzv
@@ -168,9 +167,9 @@ OUTPUT
     -observed-features-numeric-correlation.qzv
 
 ## 07_betaStats
-PURPOSE
+### PURPOSE
 - Test statistical signficant differences for beta diversity 
-INPUT
+### INPUT
 /diversity.slurm 
     -unweighted_unifrac_distance_matrix.qza (diversity.slurm)
     -weighted_unifrac_distance_matrix.qza (diversity.slurm)
@@ -179,8 +178,8 @@ INPUT
 - Set script/config.sh VARIABLES
   	- $MAPname : name of metadata file 
     - $metadataColumnNames : array of metadata column names to check for significant differences
-OUTPUT
--"${metric}-${col}-permanova.qzv"
+### OUTPUT
+- "${metric}-${col}-permanova.qzv"
     $metric = 'bray_curtis' 'jaccard' 'unweighted_unifrac' 'weighted_unifrac'
         assigned with $diversityMetrics var
     $col = $metadataColumnNames column name 
