@@ -112,6 +112,7 @@ SAMPLINGdepth=10000
 
 # 06 DIVERSITY 
 featureNum=8
+# adjusts number of arrows appearing on biplot
 # 07 BETA STATS
 
 metadataColumnNames=("col1" "col2" "col3")
