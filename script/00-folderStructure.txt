@@ -14,7 +14,7 @@ output/
         manifest.csv
         qza/
         qzv/ 
-    03-dada2/
+    02-dada2/
         qza/
         qzv/
     03-decontam/
