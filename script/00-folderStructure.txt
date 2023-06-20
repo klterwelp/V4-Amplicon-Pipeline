@@ -24,7 +24,7 @@ output/
         qza/
         qzv/
     05-ancombc/
-        ANCOMBC-formula/ 
+        $ANCOMBC-formula/ 
     05-phylogeny/
         qza/ 
     06-rarefaction/
@@ -32,17 +32,13 @@ output/
         beta/
     06-diversity/
         tables/
-        core-metrics/
-            qza/
-            qzv/
-        additional-metrics/
-            qza/
-            qzv/
+        qza/ 
+        qzv/ 
     07-alphaStats/
         group/
         correlation/
     07-betaStats/
-        col-name/
+        $col-name/
 report/
     graph/
     docs/

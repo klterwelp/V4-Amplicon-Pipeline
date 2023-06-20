@@ -70,12 +70,13 @@ source ./config.sh
 
 # setting input/output variables
 echo -e "setting input/output variables"  
-inputTax="${WKPATH}/output/04-classify"
-inputPhylo="${WKPATH}/output/05-phylogeny"
+inputTax="${WKPATH}/output/04-classify/qza"
+inputPhylo="${WKPATH}/output/05-phylogeny/qza"
 # directory containing raw fastq.gz files 
 outputDir="${WKPATH}/output/06-diversity"
 outputDirTbl="${outputDir}/tables" 
-outputDirAdd="${outputDir}/additional-metrics"
+outputDirQZA="${outputDir}/qza" 
+outputDirQZV="${outputDir}/qzv"
 # directories to place results from script
 
 # if previous output folder exists, delete it 
@@ -91,7 +92,7 @@ fi
 
 # making new import folders 
 echo -e "creating new output folders" 
-mkdir -p "${outputDir}/{tables,additional-metrics}"
+mkdir -p "${outputDir}/{tables,qza,qzv}"
     # -p ; make parent directories if needed
 
 echo -e "Input directories are...
@@ -101,7 +102,8 @@ phylogeny: $inputPhylo"
 echo -e "Output directories are... 
 main folder: $outputDir
 tables: $outputDirTbl
-additional metrics: $outputDirAdd" 
+qza: $outputDirQZA
+qzv: $outputDirQZV" 
 
 echo -e "finished setting up folders and variables" 
 echo -e "$(date)"
@@ -139,7 +141,8 @@ qiime diversity core-metrics-phylogenetic \
     --i-table "$outputDirTbl/filtered-table.qza" \
     --p-sampling-depth "$SAMPLINGdepth" \
     --m-metadata-file "$MAPname" \
-    --output-dir "$outputDir/core-metrics-results"
+    --output-dir "$outputDirQZA"
+# initially putting all core-metric result files in qza folder (even qzv)
 
 echo -e "finished core diversity metrics"
 echo -e "$(date)"
@@ -150,16 +153,16 @@ echo -e "Additional Diversity Metrics"
 qiime diversity beta \
     --i-table "$outputDirTbl/rarefied_ab_filtered-table.qza" \
     --p-metric 'jaccard' \
-    --o-distance-matrix "$outputDirAdd/abfilter_jaccard_distance_matrix.qza"
+    --o-distance-matrix "$outputDirQZA/abfilter_jaccard_distance_matrix.qza"
 
 qiime diversity pcoa \
-    --i-distance-matrix "$outputDirAdd/abfilter_jaccard_distance_matrix.qza" \
-    --o-pcoa "$outputDirAdd/abfilter_jaccard_pcoa_results.qza"
+    --i-distance-matrix "$outputDirQZA/abfilter_jaccard_distance_matrix.qza" \
+    --o-pcoa "$outputDirQZA/abfilter_jaccard_pcoa_results.qza"
 
 qiime emperor plot \
-    --i-pcoa "$outputDirAdd/abfilter_jaccard_pcoa_results.qza" \
+    --i-pcoa "$outputDirQZA/abfilter_jaccard_pcoa_results.qza" \
     --m-metadata-file "$MAPname" \
-    --o-visualization "$outputDirAdd/abfilter_jaccard_emperor.qzv"
+    --o-visualization "$outputDirQZV/abfilter_jaccard_emperor.qzv"
 
 echo -e "finished abundance filtered jaccard" 
 # jaccard is sensitive to rare taxa, filtered jaccard used to see if rare taxa changed results
@@ -173,16 +176,20 @@ echo -e "Robust Aitchison PCA (DEICODE), compositional beta diversity"
 
 qiime deicode rpca \
     --i-table "$outputDirTbl/filtered-table.qza" \
-    --o-biplot "$outputDirAdd/deicode_biplot_results.qza" \
-    --o-distance-matrix "$outputDirAdd/deicode_distance_matrix.qza"
+    --o-biplot "$outputDirQZA/deicode_biplot_results.qza" \
+    --o-distance-matrix "$outputDirQZA/deicode_distance_matrix.qza"
 
 qiime emperor biplot \
-    --i-biplot "$outputDirAdd/deicode_biplot_results.qza" \
+    --i-biplot "$outputDirQZA/deicode_biplot_results.qza" \
     --m-sample-metadata-file "$MAPname" \
     --m-feature-metadata-file "$inputTax/taxonomy-${REF_DATABASE}.qza" \
     --p-number-of-features "${featureNum}" \
-    --o-visualization deicode_emperor.qzv 
+    --o-visualization "$outputDirQZV/deicode_emperor.qzv" 
 
 echo -e "finished DEICODE calculations..." 
 echo -e "$(date)"
 
+echo -e "moving qzv files out of qza folder from core-metrics command" 
+mv $outputDirQZA/*.qzv $outputDirQZV
+echo -e "finished moving files" 
+echo -e "$(date)"

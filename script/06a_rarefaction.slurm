@@ -46,6 +46,43 @@ echo -e "Source variable names from config.sh"
 dos2unix ./config.sh
 source ./config.sh
 
+# setting input/output variables
+echo -e "setting input/output variables"  
+inputTax="${WKPATH}/output/04-classify/qza"
+inputPhylo="${WKPATH}/output/05-phylogeny/qza"
+# directory containing raw fastq.gz files 
+outputDir="${WKPATH}/output/06-rarefaction"
+outputDirA="${outputDir}/alpha" 
+outputDirB="${outputDir}/beta"
+# directories to place results from script
+
+# if previous output folder exists, delete it 
+echo -e "checking for old folders, will remove to rerun analysis" 
+
+if [ -d "$outputDir" ]
+then 
+    echo -e "Previous output folder exists, deleting now..." 
+    rm -Rfv -- "$outputDir"
+fi 
+    # -R deletes recursively, -f ignore non-existant files, -v verbose
+    # '--'' : no more flags for rm command 
+
+# making new import folders 
+echo -e "creating new output folders" 
+mkdir -p "${outputDir}/{alpha,beta}"
+    # -p ; make parent directories if needed
+
+echo -e "Input directories are...
+taxonomic/seq: $inputTax
+phylogeny: $inputPhylo" 
+
+echo -e "Output directories are... 
+main folder: $outputDir
+Alpha: $outputDirA
+Beta: $outputDirB" 
+
+echo -e "finished setting up folders and variables" 
+echo -e "$(date)"
 # record time and method name, env vars
 echo -e "$(date)"
 
@@ -53,9 +90,9 @@ echo -e "$(date)"
 echo -e "Beginning file prep for downstream analyses"
 
 qiime feature-table filter-samples \
-    --i-table table.qza \
+    --i-table "$inputTax/table.qza" \
     --m-metadata-file "$MAPname" \
-    --o-filtered-table filtered-table.qza
+    --o-filtered-table "$outputDir/filtered-table.qza"
 
 echo -e "finished file prep"
 echo -e "$(date)"
@@ -67,12 +104,12 @@ echo -e "$(date)"
 # Rarefaction, check sample depth & seq read depth sufficient or not.
 echo -e "alpha diversity, rarefaction..." 
 qiime diversity alpha-rarefaction \
-  --i-table filtered-table.qza \
-  --i-phylogeny rooted-tree.qza \
+  --i-table "$outputDir/filtered-table.qza" \
+  --i-phylogeny "$inputPhylo/rooted-tree.qza" \
   --p-max-depth "$QiimeMax" \
   --p-steps "$StepNumber" \
   --m-metadata-file "$MAPname" \
-  --o-visualization alpha-rarefaction.qzv
+  --o-visualization "$outputDirA/alpha-rarefaction.qzv"
 
 echo -e "finished alpha rarefaction..."
 echo -e "$(date)"
@@ -83,14 +120,14 @@ for metrics in 'braycurtis' 'jaccard' 'unweighted_unifrac' 'weighted_unifrac'
 do 
 echo -e "${metrics} rarefaction" 
 qiime diversity beta-rarefaction \
-    --i-table filtered-table.qza \
-    --i-phylogeny rooted-tree.qza \
+    --i-table "$outputDir/filtered-table.qza" \
+    --i-phylogeny "$inputPhylo/rooted-tree.qza" \
     --m-metadata-file "$MAPname" \
-    --p-sampling-depth $SAMPLINGdepth \
+    --p-sampling-depth "$SAMPLINGdepth" \
     --p-metric "$metrics" \
-    --o-distance-matrix "${metrics}_distance_matrix.qza" \
+    --o-distance-matrix "$outputDirB/${metrics}_distance_matrix.qza" \
     --p-clustering-method 'nj' \
-    --o-visualization "${metrics}_beta_rarefaction.qzv"
+    --o-visualization "$outputDirB/${metrics}_beta_rarefaction.qzv"
 done
 echo -e "finished beta rarefaction..."
 echo -e "$(date)"

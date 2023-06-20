@@ -43,13 +43,54 @@ source ./config.sh
 # record time and method name, env vars
 echo -e "$(date)"
 
+# setting input/output variables
+echo -e "setting input/output variables"  
+inputTax="${WKPATH}/output/04-classify/qza"
+inputPhylo="${WKPATH}/output/05-phylogeny/qza"
+inputDiv="${WKPATH}/output/06-diversity/qza"
+# directory containing raw fastq.gz files 
+outputDir="${WKPATH}/output/07-alphaStats"
+outputGroup="${outputDir}/group" 
+outputCorr="${outputDir}/correlation"
+# directories to place results from script
+
+# if previous output folder exists, delete it 
+echo -e "checking for old folders, will remove to rerun analysis" 
+
+if [ -d "$outputDir" ]
+then 
+    echo -e "Previous output folder exists, deleting now..." 
+    rm -Rfv -- "$outputDir"
+fi 
+    # -R deletes recursively, -f ignore non-existant files, -v verbose
+    # '--'' : no more flags for rm command 
+
+# making new import folders 
+echo -e "creating new output folders" 
+mkdir -p "${outputDir}/{qza,qzv}"
+    # -p ; make parent directories if needed
+
+
+echo -e "Input directories are...
+taxonomic/seq: $inputTax
+phylogeny: $inputPhylo
+diversity: $inputDiv" 
+
+echo -e "Output directories are... 
+main folder: $outputDir
+Group/Categorical: $outputGroup
+Correlation/Numeric: $outputCorr" 
+
+echo -e "finished setting up folders and variables" 
+echo -e "$(date)"
+
 #Pre-prep for all analyses
 echo -e "Beginning file prep for downstream analyses"
 
 qiime feature-table filter-samples \
---i-table table.qza \
+--i-table "$inputTax/table.qza" \
 --m-metadata-file "$MAPname" \
---o-filtered-table filtered-table.qza
+--o-filtered-table "$outputDir/filtered-table.qza"
  
 echo -e "finished file prep"
 echo -e "$(date)"
@@ -62,9 +103,9 @@ for metric in 'shannon' 'observed_features' 'evenness' 'faith_pd'
 do 
 echo $metric
 qiime diversity alpha-group-significance \
-  --i-alpha-diversity "${metric}_vector.qza" \
+  --i-alpha-diversity "$inputDiv/${metric}_vector.qza" \
   --m-metadata-file "$MAPname" \
-  --o-visualization "${metric}-group-significance.qzv"
+  --o-visualization "$outputGroup/${metric}-group-significance.qzv"
 done
 # for-loop to test statistically significant differences between groups of alpha diversity values 
 
@@ -76,9 +117,9 @@ for metric in 'shannon' 'observed_features' 'evenness' 'faith_pd'
 do 
 echo $metric
 qiime diversity alpha-correlation \
-  --i-alpha-diversity "${metric}_vector.qza" \
+  --i-alpha-diversity "$inputDiv/${metric}_vector.qza" \
   --m-metadata-file "$MAPname" \
-  --o-visualization "${metric}-numeric-correlation.qzv"
+  --o-visualization "$outputCorr/${metric}-numeric-correlation.qzv"
 done
 # for-loop to test statistically significant correlations for numeric metadata and alpha diversity 
 
