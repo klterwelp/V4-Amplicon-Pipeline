@@ -40,7 +40,7 @@ echo -e "working path: " "$WKPATH"
 
 # setting input/output variables
 echo -e "setting input/output variables"  
-inputDir="${WKPATH}/output/03-dada2/qza"
+inputDir="${WKPATH}/output/02-dada2/qza"
 # directory containing raw fastq.gz files 
 outputDir="${WKPATH}/output/03-decontam" 
 outputDirQZA="${outputDir}/qza" 
@@ -74,7 +74,7 @@ echo -e "finished setting up folders and variables"
 echo -e "$(date)"
 
 qiime quality-control decontam-identify \
-    --i-table "$inputDir/03_table.biom.qza" \
+    --i-table "$inputDir/02_table.biom.qza" \
     --m-metadata "$MAPname" \
     --p-method 'combined' \
     --p-freq-concentration-column "$concCol" \
@@ -84,10 +84,10 @@ qiime quality-control decontam-identify \
 
 qiime quality-control decontam-score-viz \
     --i-decontam-scores "$outputDirQZA/03_decontam_scores.qza" \
-    --i-table "$inputDir/03_table.biom.qza" \
+    --i-table "$inputDir/02_table.biom.qza" \
     --o-visualization "$outputDirQZV/03_decontam_scores.qzv" 
     
 qiime quality-control decontam-remove \
     --i-decontam-scores "$outputDirQZA/03_decontam_scores.qza" \
-    --i-table "$inputDir/03_table.biom.qza" \
+    --i-table "$inputDir/02_table.biom.qza" \
     --o-filtered-table "$outputDirQZA/03_decontam_table.qza" 

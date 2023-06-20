@@ -1,26 +1,26 @@
 #!/bin/bash
-#SBATCH --job-name=03_dada2
+#SBATCH --job-name=02_dada2
 #SBATCH --partition=PART_NAME
 #SBATCH --mem-per-cpu=25000
-#SBATCH --output=log/03_dada2.%j.out
+#SBATCH --output=log/02_dada2.%j.out
 #SBATCH -c 4
-#SBATCH --error=log/03_dada2.%j.err
+#SBATCH --error=log/02_dada2.%j.err
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS
 
-#------------------ SCRIPT INFO: 03_dada2.slurm --------------------#
+#------------------ SCRIPT INFO: 02_dada2.slurm --------------------#
 
 # PURPOSE
 # - quality trim, filter, denoise sequences, chimera removal, and merging of paired end reads. 
 # INPUT
 # - 01_import.fastq.qza (from: 01_import)
 # OUTPUT
-# - 03_dada2_stats.tsv.qza (intermediate)
-# - 03_table.biom.qza (04_classify-filter)
-# - 03_seq.fasta.qza  (04_classify-filter)
-# - 03_seq.fasta.qzv (table of ASVs, visualization)
-# - 03_dada2_stats.tsv.qzv (check # of reads passing filters)
+# - 02_dada2_stats.tsv.qza (intermediate)
+# - 02_table.biom.qza (04_classify-filter)
+# - 02_seq.fasta.qza  (04_classify-filter)
+# - 02_seq.fasta.qzv (table of ASVs, visualization)
+# - 02_dada2_stats.tsv.qzv (check # of reads passing filters)
 
 # ----------------- SCRIPT START -------------------- # 
 
@@ -35,7 +35,7 @@ echo -e "working path: " $WKPATH
 echo -e "setting input/output variables"  
 inputDir="${WKPATH}/output/01-import/qza"
 # directory containing raw fastq.gz files 
-outputDir="${WKPATH}/output/03-dada2" 
+outputDir="${WKPATH}/output/02-dada2" 
 outputDirQZA="${outputDir}/qza" 
 outputDirQZV="${outputDir}/qzv"
 # directories to place results from script
@@ -74,25 +74,25 @@ qiime dada2 denoise-paired \
  --p-trunc-len-r "$QiimeDada2RL" \
  --p-trim-left-f "$QiimeDada2FLeft" \
  --p-trim-left-r "$QiimeDada2RLeft" \
- --o-denoising-stats "$outputDirQZA/03_dada2_stats.tsv.qza" \
- --o-table "$outputDirQZA/03_table.biom.qza" \
- --o-representative-sequences "$outputDirQZA/03_seq.fasta.qza" \
+ --o-denoising-stats "$outputDirQZA/02_dada2_stats.tsv.qza" \
+ --o-table "$outputDirQZA/02_table.biom.qza" \
+ --o-representative-sequences "$outputDirQZA/02_seq.fasta.qza" \
  --p-n-threads 4 \
  --verbose
 
 echo -e "finished dada2 denoise."
 echo -e "$(date)"
 
-echo -e "step 4a: export 03_dada2_seq.qzv"
+echo -e "step 4a: export 02_dada2_seq.qzv"
 qiime feature-table tabulate-seqs \
- --i-data "$outputDirQZA/03_seq.fasta.qza" \
- --o-visualization "$outputDirQZV/03_seq.fasta.qzv"
+ --i-data "$outputDirQZA/02_seq.fasta.qza" \
+ --o-visualization "$outputDirQZV/02_seq.fasta.qzv"
 
-echo -e "step 4b: export 03_dada2_stats.tsv.qzv"
+echo -e "step 4b: export 02_dada2_stats.tsv.qzv"
 qiime metadata tabulate \
- --m-input-file "$outputDirQZA/03_dada2_stats.tsv.qza" \
+ --m-input-file "$outputDirQZA/02_dada2_stats.tsv.qza" \
  --p-page-size 400 \
- --o-visualization "$outputDirQZV/03_dada2_stats.tsv.qzv"
+ --o-visualization "$outputDirQZV/02_dada2_stats.tsv.qzv"
 
 echo -e "finished dada2 qzv."
 echo -e "$(date)"

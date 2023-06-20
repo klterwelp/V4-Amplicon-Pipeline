@@ -49,7 +49,7 @@ echo -e "working path: " $WKPATH
 
 # setting input/output variables
 echo -e "setting input/output variables"  
-inputDir="${WKPATH}/output/03-dada2/qza"
+inputDir="${WKPATH}/output/02-dada2/qza"
 # directory containing raw fastq.gz files 
 outputDir="${WKPATH}/output/04-classify"
 outputDirQZA="${outputDir}/qza" 
@@ -86,7 +86,7 @@ echo -e "$(date)"
 echo -e "step 04A: classify-sklearn ..."
  qiime feature-classifier classify-sklearn \
   --i-classifier "$REF_FILE" \
-  --i-reads "$inputDir/03_seq.fasta.qza" \
+  --i-reads "$inputDir/02_seq.fasta.qza" \
   --o-classification "$outputDirQZA/taxonomy-${REF_DATABASE}.qza"
 
 echo -e "finished classify-sklearn..."
@@ -102,7 +102,7 @@ qiime taxa filter-table \
   --o-filtered-table $outputDirQZA/table.qza
 
 qiime taxa filter-seqs \
-  --i-sequences "$inputDir"/03_seq.fasta.qza \
+  --i-sequences "$inputDir"/02_seq.fasta.qza \
   --i-taxonomy "$outputDirQZA/taxonomy-${REF_DATABASE}.qza" \
   --p-exclude mitochondria,chloroplast,unassigned,eukaryota \
   --o-filtered-sequences "$outputDirQZA"/rep-seqs.qza
@@ -116,7 +116,7 @@ qiime taxa filter-table \
   --o-filtered-table "$outputDirQZA"/excluded_table.qza
  
 qiime taxa filter-seqs \
-  --i-sequences "$inputDir"/03_seq.fasta.qza \
+  --i-sequences "$inputDir"/02_seq.fasta.qza \
   --i-taxonomy "$outputDirQZA/taxonomy-${REF_DATABASE}.qza" \
   --p-include mitochondria,chloroplast,unassigned,eukaryota \
   --o-filtered-sequences "$outputDirQZA"/excluded_rep-seqs.qza
