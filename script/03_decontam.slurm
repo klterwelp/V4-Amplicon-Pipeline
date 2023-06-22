@@ -76,7 +76,7 @@ echo -e "$(date)"
 qiime quality-control decontam-identify \
     --i-table "$inputDir/02_table.biom.qza" \
     --m-metadata "$MAPname" \
-    --p-method 'combined' \
+    --p-method $decontamMethod \
     --p-freq-concentration-column "$concCol" \
     --p-prev-control-column "$controlCol" \
     --p-prev-control-indicator "$controlName" \

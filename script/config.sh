@@ -89,6 +89,11 @@ controlCol="sample_type"
 controlName="blank"
     # in controlCol, the name used for blank/negative controls 
 
+decontamMethod='combined'
+    # 'combined' : uses both frequency and prevalence methods (default for core)
+    # 'frequency' : uses DNA concentration to ID contam (not for low biomass)
+    # 'prevalence' : compares features in controls vs samples (recommended for low biomass)
+
 # ------------- ZYMOQC PARAMETERS ------------- # 
 
 mockname="zymo" 
