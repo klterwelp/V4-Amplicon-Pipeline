@@ -83,10 +83,16 @@ concCol="ng_ul"
     # column that contains the concentrations of samples after beads cleanup
 
 controlCol="sample_type"
-    # column name that contains whether samples are blank or not
+    # column name that contains whether samples are negative, mock, or sample
+    # used for decontam and zymoQC
 
 controlName="blank"
     # in controlCol, the name used for blank/negative controls 
+
+# ------------- ZYMOQC PARAMETERS ------------- # 
+
+mockname="zymo" 
+    # in controlCol, the name used for zymo controls
 
 # ------------- CLASSIFY/FILTER PARAMETERS ------------- # 
 # variables used for classifying taxonomy and filter unknown/eukaryotic seqs
