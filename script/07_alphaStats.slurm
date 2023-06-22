@@ -15,8 +15,8 @@
 # PURPOSE
 # - Test statistical signficant differences for alpha diversity based on numeric/categorical metadata
 # INPUT
-# - table.qza (04_classify-filter)
-# - rooted-tree.qza (05_phylogeny)
+# ${metric}_vector.qza 
+# - alpha diversity vectors (06-diversity)
 # - Set script/config.sh VARIABLES
 # 	- $MAPname : name of metadata file 
 # OUTPUT
@@ -45,8 +45,6 @@ echo -e "$(date)"
 
 # setting input/output variables
 echo -e "setting input/output variables"  
-inputTax="${WKPATH}/output/04-classify/qza"
-inputPhylo="${WKPATH}/output/05-phylogeny/qza"
 inputDiv="${WKPATH}/output/06-diversity/qza"
 # directory containing raw fastq.gz files 
 outputDir="${WKPATH}/output/07-alphaStats"
@@ -71,10 +69,7 @@ mkdir -p "${outputDir}/{qza,qzv}"
     # -p ; make parent directories if needed
 
 
-echo -e "Input directories are...
-taxonomic/seq: $inputTax
-phylogeny: $inputPhylo
-diversity: $inputDiv" 
+echo -e "Input directories is $inputDiv" 
 
 echo -e "Output directories are... 
 main folder: $outputDir
@@ -82,17 +77,6 @@ Group/Categorical: $outputGroup
 Correlation/Numeric: $outputCorr" 
 
 echo -e "finished setting up folders and variables" 
-echo -e "$(date)"
-
-#Pre-prep for all analyses
-echo -e "Beginning file prep for downstream analyses"
-
-qiime feature-table filter-samples \
---i-table "$inputTax/table.qza" \
---m-metadata-file "$MAPname" \
---o-filtered-table "$outputDir/filtered-table.qza"
- 
-echo -e "finished file prep"
 echo -e "$(date)"
 
 echo -e "Running alpha diversity statistical significance tests"
