@@ -16,7 +16,7 @@
 # INPUT
 # - table.qza (04_classify-filter)
 # - metadata 
-# - taxonomy-${REF_DATABASE}.qza (04_classify-filter)
+# - $taxQZA (04_classify-filter)
 # - Set script/config.sh VARIABLES
 # 	- $MAPname : name of metadata file
 #   - $ANCOMBCformula : ANCOMBC formula, in R formulae format 
@@ -96,7 +96,7 @@ echo -e "$(date)"
 echo -e "filtering table by metadata" 
 
 qiime feature-table filter-samples \
-    --i-table "$inputDir"/table.qza \
+    --i-table "$tableQZA" \
     --m-metadata-file "$MAPname" \
     --o-filtered-table "$outputDir"/filtered-table.qza
 
@@ -108,7 +108,7 @@ do
 # Collapse taxa based on level of taxonomy (6 for genus)
 qiime taxa collapse \
 --i-table "$outputDir"/filtered-table.qza \
---i-taxonomy "$inputDir/taxonomy-${REF_DATABASE}.qza" \
+--i-taxonomy "$taxQZA" \
 --p-level "$lvl" \
 --o-collapsed-table "$outputDir/L$lvl-table-${REF_DATABASE}".qza
 done

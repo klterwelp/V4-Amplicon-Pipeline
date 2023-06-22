@@ -19,7 +19,7 @@
 # - aligned-rep-seqs.qza (intermediate) : aligned sequences
 # - masked-alignment-rep-seqs.qza (interemdiate) : masked aligned sequences
 # - unrooted-tree.qza (intermediate) : used to construct rooted tree
-# - rooted-tree.qza (Diversity.slurm) : phylogenetic diversity measurements 
+# - $treeQZA / rooted-tree.qza (Diversity.slurm) : phylogenetic diversity measurements 
 
 # ----------------- SCRIPT START -------------------- # 
 
@@ -68,7 +68,7 @@ qiime phylogeny align-to-tree-mafft-iqtree \
 --o-alignment "${outputDir}/aligned-rep-seqs.qza" \
 --o-masked-alignment "${outputDir}/masked-alignment-rep-seqs.qza" \
 --o-tree "${outputDir}/unrooted-tree.qza" \
---o-rooted-tree "${outputDir}/rooted-tree.qza"
+--o-rooted-tree "$treeQZA"
 
 echo -e "Finished Construction of Phylogenetic Tree"
 echo -e "$(date)"

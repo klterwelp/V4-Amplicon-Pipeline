@@ -17,8 +17,8 @@
 # - Generate rarefaction beta/alpha to test rarefaction depth
 
 # INPUT
-# - table.qza 
-# - rooted-tree.qza
+# - $tableQZA
+# - $treeQZA
 # - Set script/config.sh VARIABLES
 #   - $MAPname : metadata path
 #   - $SAMPLINGdepth : rarefaction depth, default 10,000
@@ -90,7 +90,7 @@ echo -e "$(date)"
 echo -e "Beginning file prep for downstream analyses"
 
 qiime feature-table filter-samples \
-    --i-table "$inputTax/table.qza" \
+    --i-table "$tableQZA" \
     --m-metadata-file "$MAPname" \
     --o-filtered-table "$outputDir/filtered-table.qza"
 
@@ -105,7 +105,7 @@ echo -e "$(date)"
 echo -e "alpha diversity, rarefaction..." 
 qiime diversity alpha-rarefaction \
   --i-table "$outputDir/filtered-table.qza" \
-  --i-phylogeny "$inputPhylo/rooted-tree.qza" \
+  --i-phylogeny "$treeQZA" \
   --p-max-depth "$QiimeMax" \
   --p-steps "$StepNumber" \
   --m-metadata-file "$MAPname" \
@@ -121,7 +121,7 @@ do
 echo -e "${metrics} rarefaction" 
 qiime diversity beta-rarefaction \
     --i-table "$outputDir/filtered-table.qza" \
-    --i-phylogeny "$inputPhylo/rooted-tree.qza" \
+    --i-phylogeny "$treeQZA" \
     --m-metadata-file "$MAPname" \
     --p-sampling-depth "$SAMPLINGdepth" \
     --p-metric "$metrics" \

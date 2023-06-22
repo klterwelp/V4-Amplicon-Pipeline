@@ -20,9 +20,9 @@
 #   - $REF_FILE : path to trained classifier 
 #   - $TABLEclassify : ASV table to filter from, either from DADA2 or decontam 
 # OUTPUT 
-# - taxonomy-${REF_DATABASE}.qza (Diversity.slurm, ANCOMBC)
+# - $taxQZA / taxonomy-${REF_DATABASE}.qza (Diversity.slurm, ANCOMBC)
 #   - taxonomy table based on assignments by classifier
-# - table.qza (ANCOMBC, Diversity.slurm)
+# - $tableQZA / table.qza (ANCOMBC, Diversity.slurm)
 #   - table of ASVs in samples, filtered by taxonomy
 # - excluded_table.qza (intermediate)
 #   - excluded ASV table
@@ -87,7 +87,7 @@ echo -e "step 04A: classify-sklearn ..."
  qiime feature-classifier classify-sklearn \
   --i-classifier "$REF_FILE" \
   --i-reads "$inputDir/02_seq.fasta.qza" \
-  --o-classification "$outputDirQZA/taxonomy-${REF_DATABASE}.qza"
+  --o-classification "$taxQZA"
 
 echo -e "finished classify-sklearn..."
 echo -e "$(date)"
@@ -97,13 +97,13 @@ echo -e "step 04B: filter based on taxonomy, remove mitochondria & chloroplast s
 
 qiime taxa filter-table \
   --i-table "$TABLEclassify" \
-  --i-taxonomy "$outputDirQZA/taxonomy-${REF_DATABASE}.qza" \
+  --i-taxonomy "$taxQZA" \
   --p-exclude mitochondria,chloroplast,unassigned,eukaryota \
-  --o-filtered-table $outputDirQZA/table.qza
+  --o-filtered-table $tableQZA
 
 qiime taxa filter-seqs \
   --i-sequences "$inputDir"/02_seq.fasta.qza \
-  --i-taxonomy "$outputDirQZA/taxonomy-${REF_DATABASE}.qza" \
+  --i-taxonomy "$taxQZA" \
   --p-exclude mitochondria,chloroplast,unassigned,eukaryota \
   --o-filtered-sequences "$outputDirQZA"/rep-seqs.qza
 
@@ -111,13 +111,13 @@ qiime taxa filter-seqs \
 
 qiime taxa filter-table \
   --i-table "$TABLEclassify" \
-  --i-taxonomy "$outputDirQZA/taxonomy-${REF_DATABASE}.qza" \
+  --i-taxonomy "$taxQZA" \
   --p-include mitochondria,chloroplast,unassigned,eukaryota \
   --o-filtered-table "$outputDirQZA"/excluded_table.qza
  
 qiime taxa filter-seqs \
   --i-sequences "$inputDir"/02_seq.fasta.qza \
-  --i-taxonomy "$outputDirQZA/taxonomy-${REF_DATABASE}.qza" \
+  --i-taxonomy "$taxQZA" \
   --p-include mitochondria,chloroplast,unassigned,eukaryota \
   --o-filtered-sequences "$outputDirQZA"/excluded_rep-seqs.qza
 
@@ -130,12 +130,12 @@ qiime feature-table summarize \
  
 qiime taxa barplot \
   --i-table "$outputDirQZA"/excluded_table.qza \
-  --i-taxonomy "$outputDirQZA/taxonomy-${REF_DATABASE}.qza" \
+  --i-taxonomy "$taxQZA" \
   --m-metadata-file "$MAPname" \
   --o-visualization "$outputDirQZV"/excluded_barplot.qzv 
   
 qiime metadata tabulate \
-  --m-input-file "$outputDirQZA/taxonomy-${REF_DATABASE}.qza" $outputDirQZA/excluded_rep-seqs.qza \
+  --m-input-file "$taxQZA" $outputDirQZA/excluded_rep-seqs.qza \
   --o-visualization "$outputDirQZV/excluded_taxonomy-${REF_DATABASE}.qzv"  
   
  echo -e "finished filter based on taxonomy..."

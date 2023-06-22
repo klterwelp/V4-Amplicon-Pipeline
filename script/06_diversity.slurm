@@ -20,7 +20,7 @@
 # INPUT
 # - table.qza (04-classify)
 # - rooted-tree.qza (05-phylogeny)
-# -taxonomy-${REF_DATABASE}.qza (04-classify)
+# -$taxQZA (04-classify)
 # - Set script/config.sh VARIABLES
 #   - $MAPname : metadata path
 #   - $SAMPLINGdepth : rarefaction depth, default 10,000
@@ -112,7 +112,7 @@ echo -e "$(date)"
 echo -e "Beginning file prep for downstream analyses"
 
 qiime feature-table filter-samples \
-    --i-table "$inputTax/table.qza" \
+    --i-table "$tableQZA" \
     --m-metadata-file "$MAPname" \
     --o-filtered-table "$outputDirTbl/filtered-table.qza"
 
@@ -137,7 +137,7 @@ echo -e "$(date)"
 echo -e "Core Diversity Metrics"
 
 qiime diversity core-metrics-phylogenetic \
-    --i-phylogeny "$inputPhylo/rooted-tree.qza" \
+    --i-phylogeny "$treeQZA" \
     --i-table "$outputDirTbl/filtered-table.qza" \
     --p-sampling-depth "$SAMPLINGdepth" \
     --m-metadata-file "$MAPname" \
@@ -182,7 +182,7 @@ qiime deicode rpca \
 qiime emperor biplot \
     --i-biplot "$outputDirQZA/deicode_biplot_results.qza" \
     --m-sample-metadata-file "$MAPname" \
-    --m-feature-metadata-file "$inputTax/taxonomy-${REF_DATABASE}.qza" \
+    --m-feature-metadata-file "$taxQZA" \
     --p-number-of-features "${featureNum}" \
     --o-visualization "$outputDirQZV/deicode_emperor.qzv" 
 

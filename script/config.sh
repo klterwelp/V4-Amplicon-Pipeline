@@ -5,7 +5,7 @@
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
 
 # ------------- GENERAL PARAMETERS ------------- #
-# parameters used for multiple scripts
+# adjustable parameters used for multiple scripts
 
 part_name="scavenger"
     # partition to use for SLURM scripts
@@ -35,6 +35,15 @@ MAPname="map-noZymo.txt"
 REF_DATABASE="silva"
     # name of reference database used for training classifier in 00_trainClassifier
     # also used for naming the taxonomic sequences in 04_classify-filter
+
+# files used in multiple scripts; do not edit manually
+
+taxQZA="${WKPATH}/output/04-classify/qza/taxonomy-${REF_DATABASE}.qza"
+    # taxonomy file created by 04-classify
+tableQZA="${WKPATH}/output/04-classify/qza/table.qza"
+    # filtered table of ASVs created by 04-classify
+treeQZA="${WKPATH}/output/05-phylogeny/qza/rooted-tree.qza"
+    # rooted tree from 05-phylogeny script
 
 # ------------- TRAIN CLASSIFIER PARAMETERS ------------- # 
 # variables used to train the classifier used in 04_classify-filter
