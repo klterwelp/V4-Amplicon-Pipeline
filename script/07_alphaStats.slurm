@@ -15,7 +15,7 @@
 # PURPOSE
 # - Test statistical signficant differences for alpha diversity based on numeric/categorical metadata
 # INPUT
-# ${metric}_vector.qza 
+# - ${metric}_vector.qza 
 # - alpha diversity vectors (06-diversity)
 # - Set script/config.sh VARIABLES
 # 	- $MAPname : name of metadata file 
@@ -45,7 +45,7 @@ echo -e "$(date)"
 
 # setting input/output variables
 echo -e "setting input/output variables"  
-inputDiv="${WKPATH}/output/06-diversity/qza"
+inputDir="${WKPATH}/output/06-diversity/qza"
 # directory containing raw fastq.gz files 
 outputDir="${WKPATH}/output/07-alphaStats"
 outputGroup="${outputDir}/group" 
@@ -69,7 +69,7 @@ mkdir -p "${outputDir}/{qza,qzv}"
     # -p ; make parent directories if needed
 
 
-echo -e "Input directories is $inputDiv" 
+echo -e "Input directories is $inputDir" 
 
 echo -e "Output directories are... 
 main folder: $outputDir
@@ -87,7 +87,7 @@ for metric in 'shannon' 'observed_features' 'evenness' 'faith_pd'
 do 
 echo $metric
 qiime diversity alpha-group-significance \
-  --i-alpha-diversity "$inputDiv/${metric}_vector.qza" \
+  --i-alpha-diversity "$inputDir/${metric}_vector.qza" \
   --m-metadata-file "$MAPname" \
   --o-visualization "$outputGroup/${metric}-group-significance.qzv"
 done
@@ -101,7 +101,7 @@ for metric in 'shannon' 'observed_features' 'evenness' 'faith_pd'
 do 
 echo $metric
 qiime diversity alpha-correlation \
-  --i-alpha-diversity "$inputDiv/${metric}_vector.qza" \
+  --i-alpha-diversity "$inputDir/${metric}_vector.qza" \
   --m-metadata-file "$MAPname" \
   --o-visualization "$outputCorr/${metric}-numeric-correlation.qzv"
 done
