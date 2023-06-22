@@ -157,20 +157,3 @@ ANCOMBCformula=("Supplement + Diet + Time" "Supplement + Diet" "Time")
     # entire array surrounded in ()
     # ensure that the metadata column names in formula are an EXACT MATCH with metadata file
         # column names CANNOT contain "+/-*%" because these are used in formulae  
-
-# ------------- ARCHIVED PARAMETERS ---------- # (Delete later)
-#SET="total"
-#SET="baseline"
-#SET_SELECTION="samplefilter='keep'"
-#MIN_FREQ=10000
-
-#PHYLOGENY="align-to-tree-mafft-fasttree"
-#PHYLOGENY="align-to-tree-mafft-raxml"
-
-# for core metrics script
-#QiimeDepth=0
-
-#DOWNPATH="/hpc/group/kimlab/Qiime2/Mentz-20221025/Mentz-20221025"
-
-# Diversity-ANCOM-analysis parameters 
-# requires .txt / .tsv file extension in the variable
