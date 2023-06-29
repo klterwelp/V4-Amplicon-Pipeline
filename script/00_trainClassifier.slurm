@@ -1,13 +1,13 @@
 #!/bin/bash
 #SBATCH --job-name=00_trainClassifier
-#SBATCH --partition=scavenger
+#SBATCH --partition=PART_NAME
 #SBATCH --mem-per-cpu=25000
 #SBATCH --output=log/00_trainClassifier.%j.out
 #SBATCH -c 4
 #SBATCH --error=log/00_trainClassifier.%j.err
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
-#SBATCH --mail-user=klt75@duke.edu
+#SBATCH --mail-user=EMAIL_ADDRESS
 
 #------------------ SCRIPT INFO: 00_train-classifier.slurm --------------------#
 

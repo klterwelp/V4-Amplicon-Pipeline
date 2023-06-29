@@ -1,13 +1,13 @@
 #!/bin/bash
 #SBATCH --job-name=ANCOMBC
-#SBATCH --partition=scavenger
+#SBATCH --partition=PART_NAME
 #SBATCH --mem-per-cpu=25000
 #SBATCH --output=../log/ancombc.%j.out
 #SBATCH -c 4
 #SBATCH --error=../log/ancombc.%j.err
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
-#SBATCH --mail-user=klt75@duke.edu
+#SBATCH --mail-user=EMAIL_ADDRESS
 
 #------------------ SCRIPT INFO: ANCOMBC.slurm --------------------#
 
