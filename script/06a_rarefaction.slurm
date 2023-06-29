@@ -69,7 +69,7 @@ fi
 
 # making new import folders 
 echo -e "creating new output folders" 
-mkdir -p "${outputDir}/{alpha,beta}"
+mkdir -p "${outputDir}"/{alpha,beta}
     # -p ; make parent directories if needed
 
 echo -e "Input directories are...

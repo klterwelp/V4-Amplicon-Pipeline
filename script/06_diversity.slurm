@@ -92,7 +92,7 @@ fi
 
 # making new import folders 
 echo -e "creating new output folders" 
-mkdir -p "${outputDir}/{tables,qza,qzv}"
+mkdir -p "${outputDir}"/{tables,qza,qzv}
     # -p ; make parent directories if needed
 
 echo -e "Input directories are...

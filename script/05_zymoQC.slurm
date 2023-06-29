@@ -45,7 +45,7 @@ fi
 
 # making new import folders 
 echo -e "creating new output folders" 
-mkdir -p "${outputDir}/{qza,qzv}"
+mkdir -p "${outputDir}"/{qza,qzv}
     # -p ; make parent directories if needed
 
 echo -e "Input directory is...$inputDir" 
