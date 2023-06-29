@@ -67,7 +67,7 @@ biom convert \
   --to-json
   ## convert tsv into biom 
 qiime tools import \
- --type FeatureTable[RelativeFrequency] \
+ --type "FeatureTable[RelativeFrequency]" \
  --input-path expected-taxonomy.biom \
  --input-format BIOMV100Format \
  --output-path expected-taxonomy.qza
