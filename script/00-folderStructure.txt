@@ -1,8 +1,7 @@
-data/
-    raw/ *read-only 
-        fastq.gz
-        README
-        .checksum 
+data/ *read-only 
+    fastq.gz
+    README
+    .checksum 
 meta/
     raw/
     clean/

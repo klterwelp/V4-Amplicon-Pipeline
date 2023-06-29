@@ -33,7 +33,7 @@ echo -e "working path: " $WKPATH
 
 # setting input/output variables
 echo -e "setting input/output variables"  
-inputDir="${WKPATH}/data/raw"
+inputDir="${WKPATH}/data"
 # directory containing raw fastq.gz files 
 outputDir="${WKPATH}/output/01-import" 
 outputDirQZA="${outputDir}/qza" 
