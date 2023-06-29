@@ -2,9 +2,9 @@
 #SBATCH --job-name=02_dada2
 #SBATCH --partition=PART_NAME
 #SBATCH --mem-per-cpu=25000
-#SBATCH --output=log/02_dada2.%j.out
+#SBATCH --output=../log/02_dada2.%j.out
 #SBATCH -c 4
-#SBATCH --error=log/02_dada2.%j.err
+#SBATCH --error=../log/02_dada2.%j.err
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS

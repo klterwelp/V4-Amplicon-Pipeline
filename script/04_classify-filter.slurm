@@ -2,9 +2,9 @@
 #SBATCH --job-name=04_taxfilter
 #SBATCH --partition=PART_NAME
 #SBATCH --mem-per-cpu=25000
-#SBATCH --output=log/04_taxfilter.%j.out
+#SBATCH --output=../log/04_taxfilter.%j.out
 #SBATCH -c 4
-#SBATCH --error=log/04_taxfilter.%j.err
+#SBATCH --error=../log/04_taxfilter.%j.err
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS

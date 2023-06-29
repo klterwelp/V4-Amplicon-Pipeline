@@ -2,9 +2,9 @@
 #SBATCH --job-name=ANCOMBC
 #SBATCH --partition=scavenger
 #SBATCH --mem-per-cpu=25000
-#SBATCH --output=log/ancombc.%j.out
+#SBATCH --output=../log/ancombc.%j.out
 #SBATCH -c 4
-#SBATCH --error=log/ancombc.%j.err
+#SBATCH --error=../log/ancombc.%j.err
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=klt75@duke.edu

@@ -3,9 +3,9 @@
 #SBATCH --job-name=06_diversity
 #SBATCH --partition=PART_NAME
 #SBATCH --mem=10000
-#SBATCH --output=log/01_import.%j.out
+#SBATCH --output=../log/06_diversity.%j.out
 #SBATCH --nodes=1
-#SBATCH --error=log/01_import.%j.err
+#SBATCH --error=../log/06_diversity.%j.err
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS

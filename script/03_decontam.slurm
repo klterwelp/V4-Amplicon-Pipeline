@@ -2,9 +2,9 @@
 #SBATCH --job-name=03_decontam
 #SBATCH --partition=PART_NAME
 #SBATCH --mem-per-cpu=25000
-#SBATCH --output=log/03_decontam.%j.out
+#SBATCH --output=../log/03_decontam.%j.out
 #SBATCH -c 4
-#SBATCH --error=log/03_decontam.%j.err
+#SBATCH --error=../log/03_decontam.%j.err
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS
