@@ -16,9 +16,9 @@
 # ----------------- SCRIPT START -------------------- # 
 
 # making folders for analysis 
-mkdir -p ./{log,cache,output,report,data}
-mkdir -p ./meta/{raw,clean}
-mkdir -p ./report/{graphs,docs}
+mkdir -p ../{log,cache,output,report,data}
+mkdir -p ../meta/{raw,clean}
+mkdir -p ../report/{graphs,docs}
 
 # load parameters from config file
 dos2unix ./config.sh
