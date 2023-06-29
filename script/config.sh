@@ -36,6 +36,19 @@ REF_DATABASE="silva"
     # name of reference database used for training classifier in 00_trainClassifier
     # also used for naming the taxonomic sequences in 04_classify-filter
 
+controlCol="sample_type"
+    # column name that contains whether samples are negative, mock, or sample
+    # used for decontam, zymoQC, sample filter function
+
+controlName="blank"
+    # in controlCol, the name used for blank/negative controls 
+    # used for decontam, sample filter function
+
+mockname="zymo" 
+    # in controlCol, the name used for zymo controls
+    # used for zymoQC, sample filter function
+
+# ----------------- GENERAL FILES -------------------- #
 # files used in multiple scripts; do not edit manually
 
 taxQZA="${WKPATH}/output/04-classify/qza/taxonomy-${REF_DATABASE}.qza"
@@ -50,14 +63,15 @@ treeQZA="${WKPATH}/output/05-phylogeny/qza/rooted-tree.qza"
 
 fPrimer=GTGCCAGCMGCCGCGGTAA
 rPrimer=GGACTACHVGGGTWTCTAAT
+    # PCR primers (forward and reverse)
     # must be 5'-> 3' orientation
     # ensure that the sequences are only the biological primer section
 reFasta=
     # path to database reference sequences
-    # include file name, end with : .fasta
+    # include file name and extension
 reTaxonomy= 
     # path to database taxonomic classifications
-    # include file name, end with : .txt
+    # include file name and extension
 
 # ------------- DADA2 PARAMETERS ------------- # 
 # variables used for DADA2 denoising
@@ -82,22 +96,10 @@ reTaxonomy=
 concCol="ng_ul"
     # column that contains the concentrations of samples after beads cleanup
 
-controlCol="sample_type"
-    # column name that contains whether samples are negative, mock, or sample
-    # used for decontam and zymoQC
-
-controlName="blank"
-    # in controlCol, the name used for blank/negative controls 
-
 decontamMethod='combined'
     # 'combined' : uses both frequency and prevalence methods (default for core)
     # 'frequency' : uses DNA concentration to ID contam (not for low biomass)
     # 'prevalence' : compares features in controls vs samples (recommended for low biomass)
-
-# ------------- ZYMOQC PARAMETERS ------------- # 
-
-mockname="zymo" 
-    # in controlCol, the name used for zymo controls
 
 # ------------- CLASSIFY/FILTER PARAMETERS ------------- # 
 # variables used for classifying taxonomy and filter unknown/eukaryotic seqs
