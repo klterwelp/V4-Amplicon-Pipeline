@@ -7,16 +7,16 @@
 # ------------- GENERAL PARAMETERS ------------- #
 # adjustable parameters used for multiple scripts
 
-part_name="scavenger"
+part_name=""
     # partition to use for SLURM scripts
     # default is "scavenger" partition
     # replaced from SLURM headers during 00A_install.sh
 
-email_address="klt75@duke.edu"
+email_address=""
     # email address to send emails upon completion of SLURM script
     # replaced from SLURM headers during 00A_install.sh
 
-PREFIX="Mentz-20221025"
+PREFIX=""
     # PILastName-YYYYMMDD
     # Name of analysis folder 
 
@@ -26,7 +26,7 @@ WKPATH="/hpc/group/kimlab/Qiime2/${PREFIX}"
 TMPDIR="/work/klt75"
     # Temporary work directory location 
 
-MAPname="map-noZymo.txt"
+MAPname=""
     # enter entire path surrounded in quotes
     # include .txt / .tsv file extension with the file name and path
     # used for: 03_decontam, 04_classify-filter, diversity and ANCOMBC scripts
