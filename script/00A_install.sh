@@ -25,7 +25,7 @@ dos2unix ./config.sh
 source ./config.sh
 
 # create script log
-exec &>> ./log/00_install.log
+exec &>> ../log/00_install.log
 
 # replacing partition name in all slurm files
 sed -i "s/PART_NAME/${part_name}/g" *.slurm*
