@@ -2,8 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
-data/
-log/
-script/inputoutputsnip
-script/zymo-refseq.zip
-script/zymo-refseq/
+inputoutputsnip
+zymo-refseq.zip
+zymo-refseq/
