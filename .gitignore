@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+.DS_Store
 inputoutputsnip
 zymo-refseq.zip
 zymo-refseq/
