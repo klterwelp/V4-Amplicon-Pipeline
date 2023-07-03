@@ -131,7 +131,7 @@ echo -e "In $ANCOMBCfolder folder"
     qiime composition ancombc \
         --i-table "$outputDir/L$lvl-table-${REF_DATABASE}".qza \
         --m-metadata-file "$MAPname" \
-        --p-formula $formula \
+        --p-formula "$formula" \
         --o-differentials "$ANCOMBCoutput/L$lvl"-ANCOMBC.qza
 
     #Add visualizations for ANCOMBC
