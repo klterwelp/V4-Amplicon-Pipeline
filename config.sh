@@ -107,11 +107,11 @@ decontamMethod='combined'
 REF_FILE="/hpc/group/kimlab/Qiime2/reference/qiime2-2022.8/silva-138-99-515-806-nb-classifier.qza"
     # location of classifier used for assigning taxonomy 
 
-TABLEclassify="${WKPATH}/output/02-dada2/02_table.biom.qza"
+TABLEclassify="${WKPATH}/output/02-dada2/qza/02_table.biom.qza"
     # specify table used as input for filtering out taxa/sequences
     # use DADA2 table if skipping decontam, decontam table otherwise
-    # if not using decontam: "$WKPATH/02-dada2/qza/02_table.biom.qza"
-    # if using decontam: "${WKPATH}/output/03-decontam/03_decontam_table.qza"
+    # if not using decontam: "${WKPATH}/output/02-dada2/qza/02_table.biom.qza"
+    # if using decontam: "${WKPATH}/output/03-decontam/qza/03_decontam_table.qza"
 
 # ------------- DIVERSITY PARAMETERS ------------- # 
 # variables used for generating all diversity scripts
