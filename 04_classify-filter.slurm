@@ -122,6 +122,11 @@ qiime taxa filter-seqs \
   --o-filtered-sequences "$outputDirQZA"/excluded_rep-seqs.qza
 
 # visualization of filtered taxa table
+qiime feature-table filter-samples \
+    --i-table "$tableQZA" \
+    --m-metadata-file "$MAPname" \
+    --o-filtered-table "$outputDir"/filtered-table.qza
+
 qiime feature-table summarize \
  --i-table $tableQZA \
  --m-sample-metadata-file "$MAPname" \
