@@ -121,6 +121,18 @@ qiime taxa filter-seqs \
   --p-include mitochondria,chloroplast,unassigned,eukaryota \
   --o-filtered-sequences "$outputDirQZA"/excluded_rep-seqs.qza
 
+# visualization of filtered taxa table
+qiime feature-table summarize \
+ --i-table $tableQZA \
+ --m-sample-metadata-file "$MAPname" \
+ --o-visualization "$outputDirQZV"/taxa_table.qzv
+
+ qiime taxa barplot \
+  --i-table $tableQZA \
+  --i-taxonomy "$taxQZA" \
+  --m-metadata-file "$MAPname" \
+  --o-visualization "$outputDirQZV"/taxa_barplot.qzv 
+
 # visualizations of taxa excluded from final sequences and table
 
 qiime feature-table summarize \
