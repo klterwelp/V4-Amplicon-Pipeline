@@ -70,8 +70,8 @@ echo -e "step 0: creating manifest file..."
 cd "$inputDir" || exit
 # exits script if inputDir doesn't exist, continues if it does
 echo "sample-id,absolute-filepath,direction" > "${outputDir}/manifest.csv"
-for i in *R1* ; do echo "${i/_S*.fastq.gz},$PWD/$i,forward"; done >> "${outputDir}/manifest.csv"
-for i in *R2* ; do echo "${i/_S*.fastq.gz},$PWD/$i,reverse"; done >> "${outputDir}/manifest.csv"
+for i in *_R1_* ; do echo "${i/_S*.fastq.gz},$PWD/$i,forward"; done >> "${outputDir}/manifest.csv"
+for i in *_R2_* ; do echo "${i/_S*.fastq.gz},$PWD/$i,reverse"; done >> "${outputDir}/manifest.csv"
 
 echo -e "finished creating manifest file."
 echo -e "$(date)"
