@@ -55,7 +55,7 @@ taxQZA="${WKPATH}/output/04-classify/qza/taxonomy-${REF_DATABASE}.qza"
     # taxonomy file created by 04-classify
 tableQZA="${WKPATH}/output/04-classify/qza/table.qza"
     # filtered table of ASVs created by 04-classify
-treeQZA="${WKPATH}/output/05-phylogeny/qza/rooted-tree.qza"
+treeQZA="${WKPATH}/output/05-phylogeny/rooted-tree.qza"
     # rooted tree from 05-phylogeny script
 
 # ------------- TRAIN CLASSIFIER PARAMETERS ------------- # 

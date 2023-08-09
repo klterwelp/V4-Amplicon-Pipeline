@@ -32,7 +32,6 @@ echo -e "setting input/output variables"
 inputDir="${WKPATH}/output/04-classify/qza"
 # directory containing raw fastq.gz files 
 outputDir="${WKPATH}/output/05-phylogeny"
-outputDirQZA="${outputDir}/qza" 
 # directories to place results from script
 
 # if previous output folder exists, delete it 
@@ -48,14 +47,12 @@ fi
 
 # making new import folders 
 echo -e "creating new output folders" 
-mkdir -p "${outputDir}/qza"
+mkdir -p "${outputDir}"
     # -p ; make parent directories if needed
 
 echo -e "Input directory is...$inputDir" 
 
-echo -e "Output directories are... 
-main folder: $outputDir
-qza: $outputDirQZA"
+echo -e "Output directory is...$outputDir"
 
 echo -e "finished setting up folders and variables" 
 echo -e "$(date)"
