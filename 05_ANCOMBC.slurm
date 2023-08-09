@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=ANCOMBC
+#SBATCH --job-name=05_ANCOMBC
 #SBATCH --partition=PART_NAME
 #SBATCH --mem-per-cpu=25000
-#SBATCH --output=../log/ancombc.%j.out
+#SBATCH --output=../log/05_ancombc.%j.out
 #SBATCH -c 4
-#SBATCH --error=../log/ancombc.%j.err
+#SBATCH --error=../log/05_ancombc.%j.err
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=EMAIL_ADDRESS
