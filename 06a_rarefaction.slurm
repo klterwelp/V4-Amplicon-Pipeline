@@ -125,7 +125,6 @@ qiime diversity beta-rarefaction \
     --m-metadata-file "$MAPname" \
     --p-sampling-depth "$SAMPLINGdepth" \
     --p-metric "$metrics" \
-    --o-distance-matrix "$outputDirB/${metrics}_distance_matrix.qza" \
     --p-clustering-method 'nj' \
     --o-visualization "$outputDirB/${metrics}_beta_rarefaction.qzv"
 done
