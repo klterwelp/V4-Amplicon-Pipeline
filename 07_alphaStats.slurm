@@ -65,10 +65,9 @@ fi
 
 # making new import folders 
 echo -e "creating new output folders" 
-mkdir -p "${outputDir}"/{qza,qzv}
+mkdir -p "${outputDir}"/{group,correlation}
     # -p ; make parent directories if needed
-
-
+    
 echo -e "Input directories is $inputDir" 
 
 echo -e "Output directories are... 
