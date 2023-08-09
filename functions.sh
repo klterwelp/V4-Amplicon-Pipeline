@@ -12,7 +12,7 @@ filter_qiime_table() {
     qiime feature-table filter-features \
         --i-table "$tableQZA" \
         --m-metadata-file "$MAPname" \
-        --p-where "[$controlCol] IN ($controlName, $mockname)" \
+        --p-where "["$controlCol"] IN ('$controlName', '$mockname')" \
         --p-exclude-ids TRUE \
         --o-filtered-table "$outputTableFolder"/sample-table.qza 
     
