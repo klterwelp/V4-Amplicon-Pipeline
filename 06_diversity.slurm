@@ -25,6 +25,8 @@
 #   - $MAPname : metadata path
 #   - $SAMPLINGdepth : rarefaction depth, default 10,000
 # - DEICODE plugin must be installed
+#       conda activate qiime2-2023.5 #or qiime2 version
+#       pip install deicode
 
 # OUTPUT
 # - filtered-table.qza (intermediate)
@@ -92,7 +94,7 @@ fi
 
 # making new import folders 
 echo -e "creating new output folders" 
-mkdir -p "${outputDir}"/{tables,qza,qzv}
+mkdir -p "${outputDir}"/{tables,qzv}
     # -p ; make parent directories if needed
 
 echo -e "Input directories are...
