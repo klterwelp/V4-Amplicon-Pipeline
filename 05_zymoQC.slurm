@@ -55,61 +55,83 @@ main folder: $outputDir
 qza: $outputDirQZA
 qzv: $outputDirQZV"
 
+echo -e "setting up zymo reference variables..."
+echo -e "$(date)"
+
+echo -e "Zymo references are...
+zymo ref seqs: $MOCKrefseq
+zymo taxonomy: $MOCKtax"
+
 echo -e "finished setting up folders and variables" 
 echo -e "$(date)"
 
 # import relative expected zymo sequences into qiime2 format
-
+echo -e "importing expected taxonomy into qiime2 format" 
+echo -e "$(date)"
 biom convert \
-  -i zymo-taxonomy.tsv \
-  -o expected-taxonomy.biom \
+  -i "$MOCKtax" \
+  -o "$outputDir"/expected-taxonomy.biom \
   --table-type="OTU table" \
   --to-json
   ## convert tsv into biom 
 qiime tools import \
  --type "FeatureTable[RelativeFrequency]" \
- --input-path expected-taxonomy.biom \
+ --input-path "$outputDir"/expected-taxonomy.biom \
  --input-format BIOMV100Format \
- --output-path expected-taxonomy.qza
+ --output-path "$outputDirQZA"/expected-taxonomy.qza
 
  ## import biom into rel.freq feature table
 
 # import expected zymo sequences into qiime2 format
-cat zymo-refseq/D6331.refseq/ssrRNAs/*.fasta >> zymo-seqs.fasta
-    ## concatenate all fasta files in folder into one fasta file
+echo -e "importing expected sequences into qiime2 format" 
+echo -e "$(date)"
+
 qiime tools import \
-  --input-path zymo-seqs.fasta \
-  --output-path expected-seqs.qza \
+  --input-path "$MOCKrefseq" \
+  --output-path "$outputDirQZA"/expected-seqs.qza \
   --type 'FeatureData[Sequence]'
   ## import fasta file into qza format
 
 # filter out ASV table + rep-seqs to only zymo controls 
-
+echo -e "filtering ASV and rep-seqs table to only include zymo controls" 
+echo -e "$(date)"
 qiime feature-table filter-samples \
     --i-table "$tableQZA" \
     --m-metadata-file "$MAPname" \
-    --p-where "$controlCol"="$mockname" \
-    --o-filtered-table zymo-table.qza
+    --p-where "["$controlCol"]='$mockname'" \
+    --o-filtered-table "$outputDir"/zymo-table.qza
     ## filter table to only contain zymo controls
-
 qiime feature-table filter-seqs \
-    --i-table zymo-table.qza \
+    --i-table "$outputDir"/zymo-table.qza \
     --i-data "$inputDir/rep-seqs.qza" \
-    --o-filtered-data zymo-rep-seqs.qza
+    --o-filtered-data "$outputDirQZA"/zymo-rep-seqs.qza
+
+ qiime taxa collapse \
+    --i-table "$outputDir"/zymo-table.qza \
+    --i-taxonomy $taxQZA \
+    --p-level 7 \
+    --o-collapsed-table "$outputDir"/taxa-zymo-table.qza
 
 # turn ASV table into a table of rel. abundance table  
+echo -e "creating relative abundance table" 
+echo -e "$(date)"
 qiime feature-table relative-frequency \
-    --i-table zymo-table.qza \
-    --o-relative-frequency-table zymo-freq-table.qza
+    --i-table "$outputDir"/taxa-zymo-table.qza \
+    --o-relative-frequency-table "$outputDirQZA"/zymo-freq-table.qza
 
 # compare expected v actual frequencies 
+echo -e "compare expected vs actual relative abundances and sequences" 
+echo -e "$(date)"
 qiime quality-control evaluate-composition \
-  --i-expected-features expected-taxonomy.qza \
-  --i-observed-features zymo-freq-table.qza \
-  --o-visualization eval-mock-freq-test.qzv
+  --i-expected-features "$outputDirQZA"/expected-taxonomy.qza \
+  --i-observed-features "$outputDirQZA"/zymo-freq-table.qza \
+  --o-visualization "$outputDirQZV"/eval-mock-freq-test.qzv
 
 # compare expected sequences to actual sequences 
 qiime quality-control evaluate-seqs \
-  --i-query-sequences zymo-rep-seqs.qza \
-  --i-reference-sequences expected-seqs.qza \
-  --o-visualization eval-mock-seqs-test.qzv
+  --i-query-sequences "$outputDirQZA"/zymo-rep-seqs.qza \
+  --i-reference-sequences "$outputDirQZA"/expected-seqs.qza \
+  --o-visualization "$outputDirQZV"/eval-mock-seqs-test.qzv 
+
+echo -e "finished zymo QC" 
+echo -e "$(date)"

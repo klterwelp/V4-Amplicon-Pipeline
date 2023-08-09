@@ -113,6 +113,24 @@ TABLEclassify="${WKPATH}/output/02-dada2/qza/02_table.biom.qza"
     # if not using decontam: "${WKPATH}/output/02-dada2/qza/02_table.biom.qza"
     # if using decontam: "${WKPATH}/output/03-decontam/qza/03_decontam_table.qza"
 
+# ------------------ ZYMO QC PARAMETERS ----------- #
+MOCKrefseq="/hpc/group/kimlab/Qiime2/reference/zymo-refs/zymo-seqs.fasta" 
+    # reference that contains the fasta sequences for the taxa in the mock community 
+    # for zymo this would be in: "/hpc/group/kimlab/Qiime2/reference/zymo-refs/zymo-seqs.fasta"
+
+MOCKtax="/hpc/group/kimlab/Qiime2/Kim20230512-ZymoBeadTest/meta/clean/zymo-taxonomy-sampleid.tsv"
+    # expected taxonomy table 
+    # the following path gives the expected frequency + taxonomy for the zymo mock community using SILVA database classifier
+    # /hpc/group/kimlab/Qiime2/reference/zymo-refs/zymo-taxonomy.tsv
+    # first column should be taxonomy
+    # next columns names need to match the sample-id for the mock community samples  
+    # if there are 2 mock communities then you would have three columns: 
+    # 1) Taxonomy column with the taxonomy names following the name structure of the classifier database
+    # 2) sample-ID#1 column with the relative frequency values based on the zymo mock community
+    # 3) sample-ID#2 column, exactly the same as sample-ID#1 but with different column name
+    # an example can be found in the following location: 
+    # /hpc/group/kimlab/Qiime2/Kim20230512-ZymoBeadTest/meta/clean/zymo-taxonomy-sampleid.tsv
+
 # ------------- DIVERSITY PARAMETERS ------------- # 
 # variables used for generating all diversity scripts
 
