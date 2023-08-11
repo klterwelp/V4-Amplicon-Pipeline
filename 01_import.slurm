@@ -67,11 +67,24 @@ echo -e "finished setting up folders and variables"
 echo -e "$(date)"
 
 echo -e "step 0: creating manifest file..."
-cd "$inputDir" || exit
-# exits script if inputDir doesn't exist, continues if it does
-echo "sample-id,absolute-filepath,direction" > "${outputDir}/manifest.csv"
-for i in *_R1_* ; do echo "${i/_S*.fastq.gz},$PWD/$i,forward"; done >> "${outputDir}/manifest.csv"
-for i in *_R2_* ; do echo "${i/_S*.fastq.gz},$PWD/$i,reverse"; done >> "${outputDir}/manifest.csv"
+manifest_file="${outputDir}/manifest.csv"
+
+echo "sample-id,absolute-filepath,direction" > "$manifest_file"
+
+find "$inputDir" -type f -name "*.fastq.gz" | while read -r input_file
+do
+f_suffix=$(echo "$input_file" | awk -F'_' '{for (i=NF-3; i<=NF; i++) printf "%s%s", "_", $i}')
+#awk separates the filename into fields with _, takes last four fields and prints them with "_" between each 
+sample_id=$(basename "$input_file" "$f_suffix")
+# basename removes the path from input file and the suffix found in the awk command
+echo "Adding $sample_id to manifest..."
+if [[ $f_suffix == *"_R1_"* ]]; then
+direction="forward"
+else 
+direction="reverse"
+fi
+echo "$sample_id, $input_file, $direction" >> "$manifest_file"
+done 
 
 echo -e "finished creating manifest file."
 echo -e "$(date)"
@@ -81,7 +94,7 @@ echo -e "step 1: importing paired end demultiplexed fastq.gz data..."
 
 qiime tools import \
  --type 'SampleData[PairedEndSequencesWithQuality]' \
- --input-path "${outputDir}/manifest.csv" \
+ --input-path "$manifest_file" \
  --output-path "${outputDirQZA}"/01_import.fastq.qza \
  --input-format PairedEndFastqManifestPhred33
 
