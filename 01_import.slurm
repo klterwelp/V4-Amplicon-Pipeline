@@ -77,13 +77,15 @@ f_suffix=$(echo "$input_file" | awk -F'_' '{for (i=NF-3; i<=NF; i++) printf "%s%
 #awk separates the filename into fields with _, takes last four fields and prints them with "_" between each 
 sample_id=$(basename "$input_file" "$f_suffix")
 # basename removes the path from input file and the suffix found in the awk command
+absolute_path=$(realpath "$input_file")
+# realpath function determines absolute path of input file 
 echo "Adding $sample_id to manifest..."
 if [[ $f_suffix == *"_R1_"* ]]; then
 direction="forward"
 else 
 direction="reverse"
 fi
-echo "$sample_id, $input_file, $direction" >> "$manifest_file"
+echo "$sample_id, $absolute_path, $direction" >> "$manifest_file"
 done 
 
 echo -e "finished creating manifest file."
