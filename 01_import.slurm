@@ -85,7 +85,7 @@ direction="forward"
 else 
 direction="reverse"
 fi
-echo "$sample_id, $absolute_path, $direction" >> "$manifest_file"
+echo "$sample_id,$absolute_path,$direction" >> "$manifest_file"
 done 
 
 echo -e "finished creating manifest file."
