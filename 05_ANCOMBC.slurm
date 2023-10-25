@@ -142,7 +142,8 @@ echo -e "In $ANCOMBCfolder folder"
 
     qiime composition da-barplot \
         --i-data "$ANCOMBCoutput/L$lvl"-ANCOMBC.qza \
-        --o-visualization "$ANCOMBCoutput/L$lvl"-barplot-ANCOMBC.qzv 
+        --o-visualization "$ANCOMBCoutput/L$lvl"-barplot-ANCOMBC.qzv \
+        --p-level-delimiter ';'
     done
 done
 
