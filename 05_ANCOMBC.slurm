@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=05_ANCOMBC
+#SBATCH --job-name=05_ANCOMBC
 #SBATCH --partition=PART_NAME
 #SBATCH --mem-per-cpu=25000
 #SBATCH --output=../log/05_ancombc.%j.out
