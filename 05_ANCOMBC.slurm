@@ -38,9 +38,9 @@ source ./config.sh
 echo -e "$(date)"
 # setting input/output variables
 echo -e "setting input/output variables"  
-inputDir="${WKPATH}/output/04-classify/qza"
+inputDir="${WKPATH}/output/04-classify/${REF_DATABASE}/qza"
 # directory containing raw fastq.gz files 
-outputDir="${WKPATH}/output/05-ancombc"
+outputDir="${WKPATH}/output/05-ancombc/${REF_DATABASE}"
 # directory to place results from script
 
 # if previous output folder exists, delete it 

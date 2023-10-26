@@ -51,11 +51,11 @@ mockname="zymo"
 # ----------------- GENERAL FILES -------------------- #
 # files used in multiple scripts; do not edit manually
 
-taxQZA="${WKPATH}/output/04-classify/qza/taxonomy-${REF_DATABASE}.qza"
+taxQZA="${WKPATH}/output/04-classify/${REF_DATABASE}/qza/taxonomy-${REF_DATABASE}.qza"
     # taxonomy file created by 04-classify
-tableQZA="${WKPATH}/output/04-classify/qza/table.qza"
+tableQZA="${WKPATH}/output/04-classify/${REF_DATABASE}/qza/table.qza"
     # filtered table of ASVs created by 04-classify
-treeQZA="${WKPATH}/output/05-phylogeny/rooted-tree.qza"
+treeQZA="${WKPATH}/output/05-phylogeny/${REF_DATABASE}/rooted-tree.qza"
     # rooted tree from 05-phylogeny script
 
 # ------------- TRAIN CLASSIFIER PARAMETERS ------------- # 

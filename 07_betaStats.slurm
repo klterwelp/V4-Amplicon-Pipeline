@@ -43,9 +43,9 @@ echo -e "$(date)"
 
 # setting input/output variables
 echo -e "setting input/output variables"  
-inputDir="${WKPATH}/output/06-diversity/qza"
+inputDir="${WKPATH}/output/06-diversity/${REF_DATABASE}/qza"
 # directory containing raw fastq.gz files 
-outputDir="${WKPATH}/output/07-betaStats"
+outputDir="${WKPATH}/output/07-betaStats/${REF_DATABASE}"
 # directories to place results from script
 
 # if previous output folder exists, delete it 

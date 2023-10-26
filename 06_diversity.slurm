@@ -72,10 +72,10 @@ source ./config.sh
 
 # setting input/output variables
 echo -e "setting input/output variables"  
-inputTax="${WKPATH}/output/04-classify/qza"
-inputPhylo="${WKPATH}/output/05-phylogeny/qza"
+inputTax="${WKPATH}/output/04-classify/${REF_DATABASE}/qza"
+inputPhylo="${WKPATH}/output/05-phylogeny/${REF_DATABASE}/qza"
 # directory containing raw fastq.gz files 
-outputDir="${WKPATH}/output/06-diversity"
+outputDir="${WKPATH}/output/06-diversity/${REF_DATABASE}"
 outputDirTbl="${outputDir}/tables" 
 outputDirQZA="${outputDir}/qza" 
 outputDirQZV="${outputDir}/qzv"

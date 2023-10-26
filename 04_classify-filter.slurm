@@ -51,7 +51,7 @@ echo -e "working path: " $WKPATH
 echo -e "setting input/output variables"  
 inputDir="${WKPATH}/output/02-dada2/qza"
 # directory containing raw fastq.gz files 
-outputDir="${WKPATH}/output/04-classify"
+outputDir="${WKPATH}/output/04-classify/${REF_DATABASE}"
 outputDirQZA="${outputDir}/qza" 
 outputDirQZV="${outputDir}/qzv"
 # directories to place results from script

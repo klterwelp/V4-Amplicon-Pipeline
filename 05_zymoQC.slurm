@@ -25,9 +25,9 @@ source ./config.sh
 
 # setting input/output variables
 echo -e "setting input/output variables"  
-inputDir="${WKPATH}/output/04-classify/qza"
+inputDir="${WKPATH}/output/04-classify/${REF_DATABASE}/qza"
 # directory containing raw fastq.gz files 
-outputDir="${WKPATH}/output/05-zymoQC"
+outputDir="${WKPATH}/output/05-zymoQC/${REF_DATABASE}"
 outputDirQZA="${outputDir}/qza" 
 outputDirQZV="${outputDir}/qzv" 
 # directories to place results from script
